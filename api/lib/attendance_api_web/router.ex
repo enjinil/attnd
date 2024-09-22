@@ -5,6 +5,7 @@ defmodule AttendanceApiWeb.Router do
 
   pipeline :graphql do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: "*"
     plug FetchUserPlug
   end
 
