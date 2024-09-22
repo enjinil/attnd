@@ -1,12 +1,15 @@
 defmodule AttendanceApiWeb.Router do
   use AttendanceApiWeb, :router
 
-  pipeline :api do
+  alias AttendanceApiWeb.FetchUserPlug
+
+  pipeline :graphql do
     plug :accepts, ["json"]
+    plug FetchUserPlug
   end
 
   scope "/", AttendanceApiWeb do
-    pipe_through :api
+    pipe_through :graphql
     forward "/api", GraphQl.Router
   end
 
