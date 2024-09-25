@@ -1,0 +1,34 @@
+schema {
+  query: RootQueryType
+  mutation: RootMutationType
+}
+
+type HelloWorld {
+  message: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LogoutResponse {
+  message: String
+}
+
+type RootMutationType {
+  """Login as user with email and password"""
+  login(input: LoginInput!): UserToken!
+  """Logout user"""
+  logout: LogoutResponse
+}
+
+type RootQueryType {
+  """Hello world!"""
+  helloWorld: HelloWorld
+}
+
+type UserToken {
+  email: String!
+  token: String!
+}

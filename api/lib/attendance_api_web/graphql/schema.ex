@@ -13,7 +13,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
 
   mutation do
     @desc "Login as user with email and password"
-    field :login, :user_token do
+    field :login, non_null(:user_token) do
       arg :input, non_null(:login_input)
 
       resolve fn %{input: input}, resolution -> login(input, resolution) end
