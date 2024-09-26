@@ -1,5 +1,6 @@
 import { env } from "../config";
 import { TypedDocumentString } from "../graphql/graphql";
+import { getToken } from "./auth-provider";
 
 type GqlErrorLocation = {
   line: number;
@@ -28,12 +29,19 @@ export async function gqlRequest<
   document: TypedDocumentString<TResult, TVariables> | string,
   variables?: TVariables
 ): Promise<GqlSuccessResponse<TResult>> {
+  const token = await getToken();
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/graphql-response+json",
+  } as Record<string, string>;
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(env.GRAPHQL_API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/graphql-response+json",
-    },
+    headers,
     body: JSON.stringify({
       query: document,
       variables,

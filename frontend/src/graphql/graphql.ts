@@ -63,6 +63,11 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string } };
 
+export type HelloWorldQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HelloWorldQuery = { __typename?: 'RootQueryType', helloWorld?: { __typename?: 'HelloWorld', message?: string | null } | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -86,3 +91,10 @@ export const LoginDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<LoginMutation, LoginMutationVariables>;
+export const HelloWorldDocument = new TypedDocumentString(`
+    query HelloWorld {
+  helloWorld {
+    message
+  }
+}
+    `) as unknown as TypedDocumentString<HelloWorldQuery, HelloWorldQueryVariables>;

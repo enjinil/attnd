@@ -1,23 +1,24 @@
 import { useQuery } from "react-query";
-import config from "./config";
+import { gql } from "./graphql";
+import { gqlRequest } from "./lib/graphql-client";
+
+const HELLO_WORLD = gql(`
+  query HelloWorld {
+    helloWorld {
+      message
+    }
+  }
+`);
 
 const WelcomeMessage = () => {
-  const query = useQuery({
-    queryKey: ["welcome-message"],
-    queryFn: () =>
-      fetch(config.GRAPHQL_API_URL, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: '{"query":"{helloWorld{message}}"}',
-      }).then(res => res.json()),
+  const {isLoading, isSuccess, data} = useQuery({
+    queryFn: () => gqlRequest(HELLO_WORLD),
   });
 
   return (
-    <div className="text-lg font-bold">
-      {query.isLoading && "Loading.."}
-      {query.isSuccess && query.data.data.helloWorld.message}
+    <div className="text-center text-lg font-bold">
+      {isLoading && "Loading.."}
+      {isSuccess && data.data.helloWorld?.message}
     </div>
   );
 };

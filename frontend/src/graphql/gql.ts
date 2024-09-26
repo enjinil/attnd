@@ -15,12 +15,17 @@ import * as types from './graphql';
  */
 const documents = {
     "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      token\n      email\n    }\n  }\n": types.LoginDocument,
+    "\n  query HelloWorld {\n    helloWorld {\n      message\n    }\n  }\n": types.HelloWorldDocument,
 };
 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      token\n      email\n    }\n  }\n"): typeof import('./graphql').LoginDocument;
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query HelloWorld {\n    helloWorld {\n      message\n    }\n  }\n"): typeof import('./graphql').HelloWorldDocument;
 
 
 export function gql(source: string) {
