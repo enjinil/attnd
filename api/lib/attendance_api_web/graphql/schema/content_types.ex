@@ -2,8 +2,8 @@ defmodule AttendanceApiWeb.GraphQl.Schema.ContentTypes do
   use Absinthe.Schema.Notation
 
   input_object :login_input do
-    field :email, :string
-    field :password, :string
+    field :email, non_null(:string)
+    field :password, non_null(:string)
   end
 
   object :hello_world do
@@ -11,8 +11,8 @@ defmodule AttendanceApiWeb.GraphQl.Schema.ContentTypes do
   end
 
   object :user_token do
-    field :token, :string
-    field :email, :string
+    field :token, non_null(:string)
+    field :email, non_null(:string)
   end
 
   object :logout_response do
