@@ -2,9 +2,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer, {
   userLoggedIn,
   userLoggedOut,
-} from "../../features/auth/store/auth-slice";
+} from "../features/auth/store/auth-slice";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { addLoginObserver, addLogoutObserver } from "../../lib/auth-provider";
+import { addLoginObserver, addLogoutObserver } from "../lib/auth-provider";
 
 export const store = configureStore({
   reducer: {
