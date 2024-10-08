@@ -2,12 +2,18 @@ defmodule AttendanceApi.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias AttendanceApi.Repo
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    field :role, :string, default: "user"
+    field :name, :string
+    field :position, :string
+    field :is_active, :boolean, default: true
 
     timestamps(type: :utc_datetime)
   end
@@ -37,7 +43,7 @@ defmodule AttendanceApi.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name, :position, :is_active])
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -115,5 +121,19 @@ defmodule AttendanceApi.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  @doc """
+  Creates new admin user.
+  """
+  def create_admin(params) do
+    %__MODULE__{}
+    |> registration_changeset(params)
+    |> changeset_role(%{role: "admin"})
+    |> Repo.insert()
+  end
+
+  defp changeset_role(user, params) do
+    user |> cast(params, [:role])
   end
 end
