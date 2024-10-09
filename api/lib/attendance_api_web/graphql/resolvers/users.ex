@@ -13,4 +13,13 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Users do
         success
     end
   end
+
+  def delete_account(_, %{input: id}, _) do
+    case Accounts.delete_user(id) do
+      {:error, _} ->
+        {:error, "Could not create user"}
+      {:ok, _} = _ ->
+        {:ok, %{message: "Successfully deleted user!"}}
+    end
+  end
 end

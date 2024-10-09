@@ -39,6 +39,13 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Users.create_account/3
     end
+
+    @desc "Delete user account"
+    field :delete_account, :delete_success_response do
+      arg :input, non_null(:string)
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.Users.delete_account/3
+    end
   end
 
   # subscription do

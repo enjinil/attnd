@@ -103,4 +103,9 @@ defmodule AttendanceApi.Accounts do
     query
     |> Repo.all()
   end
+
+  def delete_user(id) do
+    {rows_deleted, _} = from(u in User, where: u.id == ^id) |> Repo.delete_all()
+    {:ok, rows_deleted}
+  end
 end

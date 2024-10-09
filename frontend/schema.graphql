@@ -21,6 +21,10 @@ input AccountInput {
   role: String!
 }
 
+type DeleteSuccessResponse {
+  message: String
+}
+
 type HelloWorld {
   message: String
 }
@@ -37,6 +41,8 @@ type LogoutResponse {
 type RootMutationType {
   """Create new user account"""
   createAccount(input: AccountInput!): Account
+  """Delete user account"""
+  deleteAccount(input: String!): DeleteSuccessResponse
   """Login as user with email and password"""
   login(input: LoginInput!): UserToken!
   """Logout user"""

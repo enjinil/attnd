@@ -10,4 +10,4 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-# AttendanceApi.Accounts.User.create_admin(%{ email: "admin@test.localhost", password: "qweasd123456" })
+# AttendanceApi.Accounts.User.create_admin(%{ email: "admin@test.localhost", password: "qweasd123456", name: "-", position: "-", isActive: true, role: "admin"})

@@ -35,6 +35,11 @@ export type AccountInput = {
   role: Scalars['String']['input'];
 };
 
+export type DeleteSuccessResponse = {
+  __typename?: 'DeleteSuccessResponse';
+  message?: Maybe<Scalars['String']['output']>;
+};
+
 export type HelloWorld = {
   __typename?: 'HelloWorld';
   message?: Maybe<Scalars['String']['output']>;
@@ -54,6 +59,8 @@ export type RootMutationType = {
   __typename?: 'RootMutationType';
   /** Create new user account */
   createAccount?: Maybe<Account>;
+  /** Delete user account */
+  deleteAccount?: Maybe<DeleteSuccessResponse>;
   /** Login as user with email and password */
   login: UserToken;
   /** Logout user */
@@ -63,6 +70,11 @@ export type RootMutationType = {
 
 export type RootMutationTypeCreateAccountArgs = {
   input: AccountInput;
+};
+
+
+export type RootMutationTypeDeleteAccountArgs = {
+  input: Scalars['String']['input'];
 };
 
 
@@ -88,6 +100,13 @@ export type UserAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserAccountsQuery = { __typename?: 'RootQueryType', accounts?: Array<{ __typename?: 'Account', id: string, email: string, role: string, position: string, name: string, isActive: boolean }> | null };
+
+export type DeleteAccountMutationVariables = Exact<{
+  input: Scalars['String']['input'];
+}>;
+
+
+export type DeleteAccountMutation = { __typename?: 'RootMutationType', deleteAccount?: { __typename?: 'DeleteSuccessResponse', message?: string | null } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: AccountInput;
@@ -135,6 +154,13 @@ export const UserAccountsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UserAccountsQuery, UserAccountsQueryVariables>;
+export const DeleteAccountDocument = new TypedDocumentString(`
+    mutation DeleteAccount($input: String!) {
+  deleteAccount(input: $input) {
+    message
+  }
+}
+    `) as unknown as TypedDocumentString<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const CreateUserDocument = new TypedDocumentString(`
     mutation CreateUser($input: AccountInput!) {
   createAccount(input: $input) {
