@@ -14,10 +14,16 @@ export const store = configureStore({
 
 addLoginObserver((user) =>
   store.dispatch(
-    userLoggedIn({ user: { email: user.email }, token: user.token })
+    userLoggedIn({
+      user: { email: user.email, role: user.role },
+      token: user.token,
+    })
   )
 );
-addLogoutObserver(() => store.dispatch(userLoggedOut()));
+addLogoutObserver(() => {
+  store.dispatch(userLoggedOut());
+  window.location.reload();
+});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

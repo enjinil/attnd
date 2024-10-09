@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import LoginForm from "../../features/auth/components/login-form";
 
 const LoginPage = () => {
-  const navigate = useNavigate()
-
   return (
     <div className="flex min-h-screen w-screen items-center justify-center bg-gradient-to-b from-slate-200 to-teal-50 p-4">
       <div className="border border-slate-300 bg-white max-w-96 w-full rounded px-6 pt-4 pb-6 mb-12">
@@ -12,7 +9,7 @@ const LoginPage = () => {
             <span className="text-teal-500">Attnd</span>{" "}
             Login
           </h2>
-          <LoginForm onSuccess={() => navigate("/")} />
+          <LoginForm />
         </div>
       </div>
     </div>

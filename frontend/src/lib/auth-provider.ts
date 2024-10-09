@@ -8,6 +8,7 @@ const LOGIN = gql(`
     login(input: $input) {
       token
       email
+      role
     }
   }
 `);
@@ -17,6 +18,7 @@ const LOCAL_STORAGE_KEY = env.USER_AUTH_LOCAL_STORAGE_KEY || "USER_AUTH";
 export type User = {
   email: string;
   token: string;
+  role: string;
 };
 
 export const loginInputSchema = z.object({
@@ -79,7 +81,8 @@ class AuthAPI {
 
       const user: User = {
         email: login.email,
-        token: login.token as string,
+        token: login.token,
+        role: login.role,
       };
 
       this.persistUser(user);

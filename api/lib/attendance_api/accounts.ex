@@ -96,4 +96,11 @@ defmodule AttendanceApi.Accounts do
         {:error, "Logout failed!"}
     end
   end
+
+  def all_users() do
+    query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active}
+
+    query
+    |> Repo.all()
+  end
 end

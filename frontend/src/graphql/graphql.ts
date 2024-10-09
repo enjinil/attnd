@@ -16,6 +16,25 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Account = {
+  __typename?: 'Account';
+  email: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  isActive: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  position: Scalars['String']['output'];
+  role: Scalars['String']['output'];
+};
+
+export type AccountInput = {
+  email: Scalars['String']['input'];
+  isActive: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
+  position: Scalars['String']['input'];
+  role: Scalars['String']['input'];
+};
+
 export type HelloWorld = {
   __typename?: 'HelloWorld';
   message?: Maybe<Scalars['String']['output']>;
@@ -33,10 +52,17 @@ export type LogoutResponse = {
 
 export type RootMutationType = {
   __typename?: 'RootMutationType';
+  /** Create new user account */
+  createAccount?: Maybe<Account>;
   /** Login as user with email and password */
   login: UserToken;
   /** Logout user */
   logout?: Maybe<LogoutResponse>;
+};
+
+
+export type RootMutationTypeCreateAccountArgs = {
+  input: AccountInput;
 };
 
 
@@ -46,6 +72,7 @@ export type RootMutationTypeLoginArgs = {
 
 export type RootQueryType = {
   __typename?: 'RootQueryType';
+  accounts?: Maybe<Array<Account>>;
   /** Hello world! */
   helloWorld?: Maybe<HelloWorld>;
 };
@@ -53,15 +80,28 @@ export type RootQueryType = {
 export type UserToken = {
   __typename?: 'UserToken';
   email: Scalars['String']['output'];
+  role: Scalars['String']['output'];
   token: Scalars['String']['output'];
 };
+
+export type UserAccountsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserAccountsQuery = { __typename?: 'RootQueryType', accounts?: Array<{ __typename?: 'Account', id: string, email: string, role: string, position: string, name: string, isActive: boolean }> | null };
+
+export type CreateUserMutationVariables = Exact<{
+  input: AccountInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'RootMutationType', createAccount?: { __typename?: 'Account', id: string, name: string, email: string, role: string, position: string, isActive: boolean } | null };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string } };
+export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string, role: string } };
 
 export type HelloWorldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -83,11 +123,36 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const UserAccountsDocument = new TypedDocumentString(`
+    query UserAccounts {
+  accounts {
+    id
+    email
+    role
+    position
+    name
+    isActive
+  }
+}
+    `) as unknown as TypedDocumentString<UserAccountsQuery, UserAccountsQueryVariables>;
+export const CreateUserDocument = new TypedDocumentString(`
+    mutation CreateUser($input: AccountInput!) {
+  createAccount(input: $input) {
+    id
+    name
+    email
+    role
+    position
+    isActive
+  }
+}
+    `) as unknown as TypedDocumentString<CreateUserMutation, CreateUserMutationVariables>;
 export const LoginDocument = new TypedDocumentString(`
     mutation Login($input: LoginInput!) {
   login(input: $input) {
     token
     email
+    role
   }
 }
     `) as unknown as TypedDocumentString<LoginMutation, LoginMutationVariables>;
