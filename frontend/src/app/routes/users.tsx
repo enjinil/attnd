@@ -8,6 +8,7 @@ import { gql } from "../../graphql";
 import { gqlRequest } from "../../lib/graphql-client";
 import { useConfirm } from "../../hooks/useConfirm";
 import { queryClient } from "../../lib/react-query";
+import { useNotify } from "../../hooks/useNotify";
 
 const USER_ACCOUNTS = gql(`
   query UserAccounts {
@@ -39,6 +40,7 @@ const UsersPage = () => {
     mutationFn: (input: string) => gqlRequest(DELETE_USER, { input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      notify(`User deleted successfully!`, "success");
     },
   });
 

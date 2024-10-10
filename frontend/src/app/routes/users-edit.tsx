@@ -5,6 +5,7 @@ import UserForm from "../../features/users/components/user-form";
 import { gql } from "../../graphql";
 import { useQuery } from "react-query";
 import { gqlRequest } from "../../lib/graphql-client";
+import { useNotify } from "../../hooks/useNotify";
 
 const ACCOUNT = gql(`
   query Account($id: String!) {
@@ -21,6 +22,7 @@ const ACCOUNT = gql(`
 
 const UsersEditPage = () => {
   const params = useParams();
+  const notify = useNotify();
   const { data, isLoading } = useQuery({
     queryFn: () => gqlRequest(ACCOUNT, { id: params.id as string }),
     queryKey: ["users", params.id],
@@ -38,7 +40,11 @@ const UsersEditPage = () => {
       </div>
       <div className="border border-slate-300 bg-slate-50 rounded px-4 py-4 max-w-lg">
         {!isLoading && (
-          <UserForm id={data?.data.account.id} data={data?.data.account} />
+          <UserForm
+            id={data?.data.account.id}
+            data={data?.data.account}
+            onSuccess={() => notify("User updated successfully!", "success")}
+          />
         )}
       </div>
     </DashboardLayout>

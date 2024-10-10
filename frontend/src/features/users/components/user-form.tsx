@@ -166,10 +166,6 @@ const UserForm = ({ onSuccess = () => null, data, id }: UserFormProps) => {
           <Alert type="error" message="Failed to save user." />
         )}
 
-        {saveMutation.isSuccess && (
-          <Alert type="success" message="Successfully saved." />
-        )}
-
         <div className="flex justify-end pt-4">
           <Button type="submit">{id ? "Save Changes" : "Create User"}</Button>
         </div>
