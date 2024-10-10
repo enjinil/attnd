@@ -15,6 +15,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
     end
 
     field :accounts, list_of(non_null(:account)) do
+      arg :query, :string
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Users.all/3
     end

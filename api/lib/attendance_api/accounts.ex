@@ -97,13 +97,27 @@ defmodule AttendanceApi.Accounts do
     end
   end
 
-  def all_users() do
-    query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},
+  def all_users(keyword \\ "") do
+    query = from u in User,
+      select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},
       order_by: [:id]
 
     query
+    |> maybe_filter_by_keyword(User, keyword)
     |> Repo.all()
   end
+
+  defp maybe_filter_by_keyword(query, schema, keyword) do
+    likeKeyword = "%#{keyword}%"
+
+    if keyword not in [nil, ""] do
+      query
+      |> where([schema], ilike(schema.name, ^likeKeyword) or ilike(schema.email, ^likeKeyword))
+    else
+      query
+    end
+  end
+
 
   def fetch_user_by_id(id) do
     query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},

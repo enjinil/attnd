@@ -1,8 +1,9 @@
 defmodule AttendanceApiWeb.Graphql.Resolvers.Users do
   alias AttendanceApi.Accounts
 
-  def all(_, _args, _) do
-    {:ok, AttendanceApi.Accounts.all_users()}
+  def all(_, args, _) do
+    IO.inspect(Map.get(args, :query))
+    {:ok, AttendanceApi.Accounts.all_users(Map.get(args, :query))}
   end
 
   def fetch_user_by_id(_, %{id: id}, _) do

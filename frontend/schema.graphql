@@ -53,7 +53,7 @@ type RootMutationType {
 
 type RootQueryType {
   account(id: String!): Account!
-  accounts: [Account!]
+  accounts(query: String): [Account!]
   """Hello world!"""
   helloWorld: HelloWorld
 }

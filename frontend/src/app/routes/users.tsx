@@ -9,10 +9,15 @@ import { gqlRequest } from "../../lib/graphql-client";
 import { useConfirm } from "../../hooks/useConfirm";
 import { queryClient } from "../../lib/react-query";
 import { useNotify } from "../../hooks/useNotify";
+import {
+  UserSearchForm,
+  useSearchForm,
+} from "../../features/users/components/user-search-form";
+import { useState } from "react";
 
 const USER_ACCOUNTS = gql(`
-  query UserAccounts {
-    accounts {
+  query UserAccounts($query: String) {
+    accounts(query: $query) {
       id
       email
       role
@@ -32,9 +37,15 @@ const DELETE_USER = gql(`
 `);
 
 const UsersPage = () => {
+  const notify = useNotify();
+  const searchForm = useSearchForm();
+  const [confirm, ConfirmDialog] = useConfirm();
+  const [queryTimestamp, setQueryTimestamp] = useState("0");
+
   const { data } = useQuery({
-    queryFn: () => gqlRequest(USER_ACCOUNTS),
-    queryKey: ["users"],
+    queryFn: () =>
+      gqlRequest(USER_ACCOUNTS, { query: searchForm.getValues().query }),
+    queryKey: ["users", queryTimestamp],
   });
   const deleteAccountMutation = useMutation({
     mutationFn: (input: string) => gqlRequest(DELETE_USER, { input }),
@@ -43,8 +54,6 @@ const UsersPage = () => {
       notify(`User deleted successfully!`, "success");
     },
   });
-
-  const [confirm, ConfirmDialog] = useConfirm();
 
   const usersTable = useTable({
     data: data?.data.accounts || [],
@@ -108,9 +117,15 @@ const UsersPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl text-slate-800 font-bold mr-6">Users</h2>
-        <Button to="/users/new">New User</Button>
+      <div className="flex items-center flex-wrap justify-between mb-6">
+        <h2 className="text-xl text-slate-800 font-bold mb-1 mr-6">Users</h2>
+        <div className="flex space-x-4">
+          <UserSearchForm
+            form={searchForm}
+            onSubmit={() => setQueryTimestamp(new Date().getTime().toString())}
+          />
+          <Button to="/users/new">New User</Button>
+        </div>
       </div>
       <div className="border border-slate-300 bg-slate-50 rounded pt-2 mb-2">
         <Table {...usersTable.props} />

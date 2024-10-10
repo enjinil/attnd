@@ -103,6 +103,11 @@ export type RootQueryTypeAccountArgs = {
   id: Scalars['String']['input'];
 };
 
+
+export type RootQueryTypeAccountsArgs = {
+  query?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UserToken = {
   __typename?: 'UserToken';
   email: Scalars['String']['output'];
@@ -117,7 +122,9 @@ export type AccountQueryVariables = Exact<{
 
 export type AccountQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, email: string, role: string, position: string, name: string, isActive: boolean } };
 
-export type UserAccountsQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserAccountsQueryVariables = Exact<{
+  query?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type UserAccountsQuery = { __typename?: 'RootQueryType', accounts?: Array<{ __typename?: 'Account', id: string, email: string, role: string, position: string, name: string, isActive: boolean }> | null };
@@ -184,8 +191,8 @@ export const AccountDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
 export const UserAccountsDocument = new TypedDocumentString(`
-    query UserAccounts {
-  accounts {
+    query UserAccounts($query: String) {
+  accounts(query: $query) {
     id
     email
     role
