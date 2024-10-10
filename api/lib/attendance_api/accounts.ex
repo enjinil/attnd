@@ -98,7 +98,8 @@ defmodule AttendanceApi.Accounts do
   end
 
   def all_users() do
-    query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active}
+    query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},
+      order_by: [:id]
 
     query
     |> Repo.all()
