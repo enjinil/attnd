@@ -2,7 +2,6 @@ defmodule AttendanceApiWeb.GraphQl.Middleware.Authorize do
   @behaviour Absinthe.Middleware
 
   def call(resolution, role) do
-    IO.inspect(resolution.context)
     with %{current_user: current_user} <- resolution.context,
     true <- correct_role?(current_user, role) do
       resolution

@@ -18,6 +18,12 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Users.all/3
     end
+
+    field :account, non_null(:account) do
+      arg :id, non_null(:string)
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.Users.fetch_user_by_id/3
+    end
   end
 
   mutation do
@@ -38,6 +44,15 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       arg :input, non_null(:account_input)
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Users.create_account/3
+    end
+
+    @desc "Update new user account"
+    field :update_account, :account do
+      arg :id, non_null(:string)
+      arg :input, non_null(:account_input)
+
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.Users.update_account/3
     end
 
     @desc "Delete user account"

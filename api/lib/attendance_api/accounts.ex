@@ -105,6 +105,28 @@ defmodule AttendanceApi.Accounts do
     |> Repo.all()
   end
 
+  def fetch_user_by_id(id) do
+    query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},
+      where: u.id == ^id
+
+    case Repo.one(query) do
+      nil -> {:error, nil}
+      user ->{:ok, user}
+    end
+  end
+
+  def update_user(id, attrs) do
+    with user <- Repo.get(User, id) do
+      result = user
+      |> User.registration_changeset(attrs)
+      |> Repo.update()
+
+      result
+    else
+      _ -> {:error, "User not found!"}
+    end
+  end
+
   def delete_user(id) do
     case from(u in User, where: u.id == ^id) |> Repo.delete_all() do
       {0, _} -> {:error, 0}

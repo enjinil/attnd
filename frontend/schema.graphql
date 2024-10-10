@@ -47,9 +47,12 @@ type RootMutationType {
   login(input: LoginInput!): UserToken!
   """Logout user"""
   logout: LogoutResponse
+  """Update new user account"""
+  updateAccount(id: String!, input: AccountInput!): Account
 }
 
 type RootQueryType {
+  account(id: String!): Account!
   accounts: [Account!]
   """Hello world!"""
   helloWorld: HelloWorld

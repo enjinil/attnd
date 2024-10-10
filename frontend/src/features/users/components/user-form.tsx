@@ -12,10 +12,6 @@ import { gql } from "../../../graphql";
 import { gqlRequest } from "../../../lib/graphql-client";
 import { queryClient } from "../../../lib/react-query";
 
-interface UserFormProps {
-  onSuccess?: () => void;
-}
-
 const userInputSchema = z.object({
   email: z.string().min(8),
   password: z.string(),
@@ -33,6 +29,12 @@ const userInputSchema = z.object({
 
 export type UserInput = z.infer<typeof userInputSchema>;
 
+interface UserFormProps {
+  onSuccess?: () => void;
+  data?: Partial<UserInput>;
+  id?: string;
+}
+
 const defaultValues = {
   name: "",
   position: "",
@@ -42,7 +44,7 @@ const defaultValues = {
   isActive: true,
 };
 
-const CREATE_USER = gql(`
+const CREATE_ACCOUNT = gql(`
   mutation CreateUser($input: AccountInput!) {
     createAccount(input: $input) {
       id
@@ -55,13 +57,43 @@ const CREATE_USER = gql(`
   }
 `);
 
+const UPDATE_ACCOUNT = gql(`
+  mutation UpdateAccount($input: AccountInput!, $id: String!) {
+    updateAccount(input: $input, id: $id) {
+      id
+      name
+      email
+      role
+      position
+      isActive
+    }
+  }
+`);
+
 const createUser = (input: UserInput) => {
-  return gqlRequest(CREATE_USER, { input });
+  return gqlRequest(CREATE_ACCOUNT, { input });
 };
 
-const UserForm = ({ onSuccess = () => null }: UserFormProps) => {
-  const createMutation = useMutation({
-    mutationFn: (data: UserInput) => createUser(data),
+const prepareUpdateInput = (input: UserInput) => {
+  // Update password if not empty
+  if (input.password !== "") {
+    return input;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: _, ...inputWithoutPassword } = input;
+
+  return inputWithoutPassword;
+};
+
+const updateUser = (id: string, input: UserInput) => {
+  return gqlRequest(UPDATE_ACCOUNT, { id, input: prepareUpdateInput(input) });
+};
+
+const UserForm = ({ onSuccess = () => null, data, id }: UserFormProps) => {
+  const saveMutation = useMutation({
+    mutationFn: (input: UserInput) =>
+      id ? updateUser(id, input) : createUser(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       onSuccess?.();
@@ -75,7 +107,7 @@ const UserForm = ({ onSuccess = () => null }: UserFormProps) => {
     watch,
   } = useForm<UserInput>({
     resolver: zodResolver(userInputSchema),
-    defaultValues,
+    defaultValues: data || defaultValues,
   });
 
   const role = watch("role");
@@ -84,7 +116,7 @@ const UserForm = ({ onSuccess = () => null }: UserFormProps) => {
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        createMutation.mutate(data);
+        saveMutation.mutate(data);
       })}
     >
       <div className="space-y-4">
@@ -130,12 +162,16 @@ const UserForm = ({ onSuccess = () => null }: UserFormProps) => {
           />
         </Field>
 
-        {createMutation.isError && (
+        {saveMutation.isError && (
           <Alert type="error" message="Failed to save user." />
         )}
 
+        {saveMutation.isSuccess && (
+          <Alert type="success" message="Successfully saved." />
+        )}
+
         <div className="flex justify-end pt-4">
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit">{id ? "Save Changes" : "Create User"}</Button>
         </div>
       </div>
     </form>

@@ -65,6 +65,8 @@ export type RootMutationType = {
   login: UserToken;
   /** Logout user */
   logout?: Maybe<LogoutResponse>;
+  /** Update new user account */
+  updateAccount?: Maybe<Account>;
 };
 
 
@@ -82,11 +84,23 @@ export type RootMutationTypeLoginArgs = {
   input: LoginInput;
 };
 
+
+export type RootMutationTypeUpdateAccountArgs = {
+  id: Scalars['String']['input'];
+  input: AccountInput;
+};
+
 export type RootQueryType = {
   __typename?: 'RootQueryType';
+  account: Account;
   accounts?: Maybe<Array<Account>>;
   /** Hello world! */
   helloWorld?: Maybe<HelloWorld>;
+};
+
+
+export type RootQueryTypeAccountArgs = {
+  id: Scalars['String']['input'];
 };
 
 export type UserToken = {
@@ -95,6 +109,13 @@ export type UserToken = {
   role: Scalars['String']['output'];
   token: Scalars['String']['output'];
 };
+
+export type AccountQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type AccountQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, email: string, role: string, position: string, name: string, isActive: boolean } };
 
 export type UserAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -114,6 +135,14 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'RootMutationType', createAccount?: { __typename?: 'Account', id: string, name: string, email: string, role: string, position: string, isActive: boolean } | null };
+
+export type UpdateAccountMutationVariables = Exact<{
+  input: AccountInput;
+  id: Scalars['String']['input'];
+}>;
+
+
+export type UpdateAccountMutation = { __typename?: 'RootMutationType', updateAccount?: { __typename?: 'Account', id: string, name: string, email: string, role: string, position: string, isActive: boolean } | null };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -142,6 +171,18 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const AccountDocument = new TypedDocumentString(`
+    query Account($id: String!) {
+  account(id: $id) {
+    id
+    email
+    role
+    position
+    name
+    isActive
+  }
+}
+    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
 export const UserAccountsDocument = new TypedDocumentString(`
     query UserAccounts {
   accounts {
@@ -173,6 +214,18 @@ export const CreateUserDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CreateUserMutation, CreateUserMutationVariables>;
+export const UpdateAccountDocument = new TypedDocumentString(`
+    mutation UpdateAccount($input: AccountInput!, $id: String!) {
+  updateAccount(input: $input, id: $id) {
+    id
+    name
+    email
+    role
+    position
+    isActive
+  }
+}
+    `) as unknown as TypedDocumentString<UpdateAccountMutation, UpdateAccountMutationVariables>;
 export const LoginDocument = new TypedDocumentString(`
     mutation Login($input: LoginInput!) {
   login(input: $input) {
