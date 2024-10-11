@@ -3,6 +3,28 @@ schema {
   mutation: RootMutationType
 }
 
+type Account {
+  email: String!
+  id: String!
+  isActive: Boolean!
+  name: String!
+  position: String!
+  role: String!
+}
+
+input AccountInput {
+  email: String!
+  isActive: Boolean!
+  name: String!
+  password: String
+  position: String!
+  role: String!
+}
+
+type DeleteSuccessResponse {
+  message: String
+}
+
 type HelloWorld {
   message: String
 }
@@ -17,18 +39,30 @@ type LogoutResponse {
 }
 
 type RootMutationType {
+  """Create new user account"""
+  createAccount(input: AccountInput!): Account
+  """Delete user account"""
+  deleteAccount(input: String!): DeleteSuccessResponse
   """Login as user with email and password"""
   login(input: LoginInput!): UserToken!
   """Logout user"""
   logout: LogoutResponse
+  """Update new user account"""
+  updateAccount(id: String!, input: AccountInput!): Account
 }
 
 type RootQueryType {
+  account(id: String!): Account!
+  accounts(query: String): [Account!]
   """Hello world!"""
   helloWorld: HelloWorld
+  me: Account!
 }
 
 type UserToken {
   email: String!
+  name: String!
+  position: String!
+  role: String!
   token: String!
 }

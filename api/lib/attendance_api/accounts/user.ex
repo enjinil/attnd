@@ -2,12 +2,18 @@ defmodule AttendanceApi.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias AttendanceApi.Repo
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    field :role, :string, default: "user"
+    field :name, :string
+    field :position, :string
+    field :is_active, :boolean, default: true
 
     timestamps(type: :utc_datetime)
   end
@@ -37,17 +43,18 @@ defmodule AttendanceApi.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name, :position, :is_active, :role])
+    |> validate_required([:name, :position, :is_active, :role])
     |> validate_email(opts)
     |> validate_password(opts)
   end
 
-  defp validate_email(changeset, opts) do
+  defp validate_email(changeset, _opts) do
     changeset
     |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
-    |> maybe_validate_unique_email(opts)
+    |> validate_unique_email()
   end
 
   defp validate_password(changeset, opts) do
@@ -78,14 +85,10 @@ defmodule AttendanceApi.Accounts.User do
     end
   end
 
-  defp maybe_validate_unique_email(changeset, opts) do
-    if Keyword.get(opts, :validate_email, true) do
-      changeset
-      |> unsafe_validate_unique(:email, AttendanceApi.Repo)
-      |> unique_constraint(:email)
-    else
-      changeset
-    end
+  defp validate_unique_email(changeset) do
+    changeset
+    |> unsafe_validate_unique(:email, AttendanceApi.Repo)
+    |> unique_constraint(:email)
   end
 
   @doc """
@@ -115,5 +118,19 @@ defmodule AttendanceApi.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  @doc """
+  Creates new admin user.
+  """
+  def create_admin(params) do
+    %__MODULE__{}
+    |> registration_changeset(params)
+    |> changeset_role(%{role: "admin"})
+    |> Repo.insert()
+  end
+
+  defp changeset_role(user, params) do
+    user |> cast(params, [:role])
   end
 end

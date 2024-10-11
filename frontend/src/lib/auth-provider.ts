@@ -8,6 +8,9 @@ const LOGIN = gql(`
     login(input: $input) {
       token
       email
+      role
+      position
+      name
     }
   }
 `);
@@ -17,6 +20,9 @@ const LOCAL_STORAGE_KEY = env.USER_AUTH_LOCAL_STORAGE_KEY || "USER_AUTH";
 export type User = {
   email: string;
   token: string;
+  role: string;
+  name: string;
+  position: string;
 };
 
 export const loginInputSchema = z.object({
@@ -59,33 +65,23 @@ class AuthAPI {
     this.logoutObservers.forEach((observer) => observer());
   }
 
-  getPersistedUser(): User | null {
-    const userData = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-    return userData ? JSON.parse(userData) : null;
+  getToken() {
+    const token = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+    return token && JSON.parse(token);
   }
 
-  async getToken() {
-    const user = this.getPersistedUser();
-    return user ? user.token : null;
-  }
-
-  private persistUser(user: User) {
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+  private persistToken(token: string) {
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(token));
   }
 
   async login(input: LoginInput) {
     return gqlRequest(LOGIN, { input }).then((result) => {
       const { login } = result.data;
 
-      const user: User = {
-        email: login.email,
-        token: login.token as string,
-      };
+      this.persistToken(login.token);
+      this.notifyLoginObservers(login);
 
-      this.persistUser(user);
-      this.notifyLoginObservers(user);
-
-      return user;
+      return login;
     });
   }
 
@@ -100,7 +96,6 @@ export const authAPI = new AuthAPI();
 export const getToken = authAPI.getToken.bind(authAPI);
 export const login = authAPI.login.bind(authAPI);
 export const logout = authAPI.logout.bind(authAPI);
-export const getPersistedUser = authAPI.getPersistedUser.bind(authAPI);
 export const addLoginObserver = authAPI.addLoginObserver.bind(authAPI);
 export const addLogoutObserver = authAPI.addLogoutObserver.bind(authAPI);
 export const removeLoginObserver = authAPI.removeLoginObserver.bind(authAPI);

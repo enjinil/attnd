@@ -1,7 +1,15 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { addLoginObserver, addLogoutObserver } from "./auth-provider";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
+  },
+});
 
 addLoginObserver(() => queryClient.refetchQueries());
 

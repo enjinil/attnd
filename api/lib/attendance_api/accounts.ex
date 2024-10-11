@@ -96,4 +96,55 @@ defmodule AttendanceApi.Accounts do
         {:error, "Logout failed!"}
     end
   end
+
+  def all_users(keyword \\ "") do
+    query = from u in User,
+      select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},
+      order_by: [:id]
+
+    query
+    |> maybe_filter_by_keyword(User, keyword)
+    |> Repo.all()
+  end
+
+  defp maybe_filter_by_keyword(query, schema, keyword) do
+    likeKeyword = "%#{keyword}%"
+
+    if keyword not in [nil, ""] do
+      query
+      |> where([schema], ilike(schema.name, ^likeKeyword) or ilike(schema.email, ^likeKeyword))
+    else
+      query
+    end
+  end
+
+
+  def fetch_user_by_id(id) do
+    query = from u in User, select: %{email: u.email, role: u.role, id: u.id, name: u.name, position: u.position, is_active: u.is_active},
+      where: u.id == ^id
+
+    case Repo.one(query) do
+      nil -> {:error, nil}
+      user ->{:ok, user}
+    end
+  end
+
+  def update_user(id, attrs) do
+    with user <- Repo.get(User, id) do
+      result = user
+      |> User.registration_changeset(attrs)
+      |> Repo.update()
+
+      result
+    else
+      _ -> {:error, "User not found!"}
+    end
+  end
+
+  def delete_user(id) do
+    case from(u in User, where: u.id == ^id) |> Repo.delete_all() do
+      {0, _} -> {:error, 0}
+      {rows_deleted, _} -> {:ok, rows_deleted}
+    end
+  end
 end

@@ -29,7 +29,7 @@ export async function gqlRequest<
   document: TypedDocumentString<TResult, TVariables> | string,
   variables?: TVariables
 ): Promise<GqlSuccessResponse<TResult>> {
-  const token = await getToken();
+  const token = getToken();
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/graphql-response+json",
