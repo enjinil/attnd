@@ -56,10 +56,13 @@ type RootQueryType {
   accounts(query: String): [Account!]
   """Hello world!"""
   helloWorld: HelloWorld
+  me: Account!
 }
 
 type UserToken {
   email: String!
+  name: String!
+  position: String!
   role: String!
   token: String!
 }

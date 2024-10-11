@@ -14,6 +14,7 @@ import UsersNewPage from "./routes/users-new";
 import AdminPage from "./routes/admin";
 import { isAdminUser } from "../utils/user";
 import UsersEditPage from "./routes/users-edit";
+import useBootstrapUser from "../features/auth/hooks/useBootstrapUser";
 
 const AdminRoute = () => {
   const user = useUser();
@@ -50,7 +51,9 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  const { isLoading } = useBootstrapUser();
+
+  return isLoading ? "Loading user.." : <RouterProvider router={router} />;
 };
 
 export default App;

@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getPersistedUser } from "../../../lib/auth-provider";
+import { getToken } from "../../../lib/auth-provider";
 
 interface AuthState {
-  user: null | { email: string; role: string };
+  user: null | { email: string; role: string; position: string; name: string };
   token: null | string;
 }
 
-const user = getPersistedUser();
+const token = getToken();
 
 const initialState: AuthState = {
-  user: user ? { email: user.email, role: user.role } : null,
-  token: user ? user.token : null,
+  user: null,
+  token: token || null,
 };
 
 const authSlice = createSlice({

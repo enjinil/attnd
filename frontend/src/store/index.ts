@@ -1,8 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer, {
-  userLoggedIn,
-  userLoggedOut,
-} from "../features/auth/store/auth-slice";
+import authReducer, { userLoggedIn } from "../features/auth/store/auth-slice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { addLoginObserver, addLogoutObserver } from "../lib/auth-provider";
 
@@ -12,16 +9,16 @@ export const store = configureStore({
   },
 });
 
-addLoginObserver((user) =>
+addLoginObserver(({ token, ...user }) => {
   store.dispatch(
     userLoggedIn({
-      user: { email: user.email, role: user.role },
-      token: user.token,
+      user,
+      token,
     })
-  )
-);
+  );
+});
 addLogoutObserver(() => {
-  store.dispatch(userLoggedOut());
+  // Reset state in memory by reloading
   window.location.reload();
 });
 

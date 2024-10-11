@@ -17,10 +17,10 @@ const documents = {
     "\n  query Account($id: String!) {\n    account(id: $id) {\n      id\n      email\n      role\n      position\n      name\n      isActive\n    }\n  }  \n": types.AccountDocument,
     "\n  query UserAccounts($query: String) {\n    accounts(query: $query) {\n      id\n      email\n      role\n      position\n      name\n      isActive\n    }\n  }\n": types.UserAccountsDocument,
     "\n  mutation DeleteAccount($input: String!) {\n    deleteAccount(input: $input) {\n      message\n    }\n  }\n": types.DeleteAccountDocument,
+    "\n  query Me{\n    me {\n      email\n      role\n      position\n      name\n    }\n  }\n": types.MeDocument,
     "\n  mutation CreateUser($input: AccountInput!) {\n    createAccount(input: $input) {\n      id\n      name\n      email\n      role\n      position\n      isActive\n    }\n  }\n": types.CreateUserDocument,
     "\n  mutation UpdateAccount($input: AccountInput!, $id: String!) {\n    updateAccount(input: $input, id: $id) {\n      id\n      name\n      email\n      role\n      position\n      isActive\n    }\n  }\n": types.UpdateAccountDocument,
-    "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      token\n      email\n      role\n    }\n  }\n": types.LoginDocument,
-    "\n  query HelloWorld {\n    helloWorld {\n      message\n    }\n  }\n": types.HelloWorldDocument,
+    "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      token\n      email\n      role\n      position\n      name\n    }\n  }\n": types.LoginDocument,
 };
 
 /**
@@ -38,6 +38,10 @@ export function gql(source: "\n  mutation DeleteAccount($input: String!) {\n    
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query Me{\n    me {\n      email\n      role\n      position\n      name\n    }\n  }\n"): typeof import('./graphql').MeDocument;
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation CreateUser($input: AccountInput!) {\n    createAccount(input: $input) {\n      id\n      name\n      email\n      role\n      position\n      isActive\n    }\n  }\n"): typeof import('./graphql').CreateUserDocument;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -46,11 +50,7 @@ export function gql(source: "\n  mutation UpdateAccount($input: AccountInput!, $
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      token\n      email\n      role\n    }\n  }\n"): typeof import('./graphql').LoginDocument;
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  query HelloWorld {\n    helloWorld {\n      message\n    }\n  }\n"): typeof import('./graphql').HelloWorldDocument;
+export function gql(source: "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      token\n      email\n      role\n      position\n      name\n    }\n  }\n"): typeof import('./graphql').LoginDocument;
 
 
 export function gql(source: string) {

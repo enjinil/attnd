@@ -14,6 +14,10 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       resolve &hello_world/2
     end
 
+    field :me, non_null(:account) do
+      resolve &Resolvers.Users.me/3
+    end
+
     field :accounts, list_of(non_null(:account)) do
       arg :query, :string
       middleware Middleware.Authorize, "admin"
@@ -73,7 +77,13 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
   def login(%{email: email, password: password}, _resolution) do
     with %User{} = user <- AttendanceApi.Accounts.get_user_by_email_and_password(email, password),
       token <- AttendanceApi.Accounts.create_user_api_token(user) do
-      {:ok, %{token: token, email: user.email, role: user.role }}
+      {:ok, %{
+        token: token,
+        email: user.email,
+        role: user.role,
+        position: user.position,
+        name: user.name
+      }}
     else
       _ -> {:error, "Invalid credentials"}
     end

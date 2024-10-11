@@ -14,6 +14,8 @@ defmodule AttendanceApiWeb.GraphQl.Schema.ContentTypes do
     field :token, non_null(:string)
     field :email, non_null(:string)
     field :role, non_null(:string)
+    field :name, non_null(:string)
+    field :position, non_null(:string)
   end
 
   object :logout_response do

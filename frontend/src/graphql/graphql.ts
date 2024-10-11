@@ -96,6 +96,7 @@ export type RootQueryType = {
   accounts?: Maybe<Array<Account>>;
   /** Hello world! */
   helloWorld?: Maybe<HelloWorld>;
+  me: Account;
 };
 
 
@@ -111,6 +112,8 @@ export type RootQueryTypeAccountsArgs = {
 export type UserToken = {
   __typename?: 'UserToken';
   email: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  position: Scalars['String']['output'];
   role: Scalars['String']['output'];
   token: Scalars['String']['output'];
 };
@@ -136,6 +139,11 @@ export type DeleteAccountMutationVariables = Exact<{
 
 export type DeleteAccountMutation = { __typename?: 'RootMutationType', deleteAccount?: { __typename?: 'DeleteSuccessResponse', message?: string | null } | null };
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'RootQueryType', me: { __typename?: 'Account', email: string, role: string, position: string, name: string } };
+
 export type CreateUserMutationVariables = Exact<{
   input: AccountInput;
 }>;
@@ -156,12 +164,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string, role: string } };
-
-export type HelloWorldQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type HelloWorldQuery = { __typename?: 'RootQueryType', helloWorld?: { __typename?: 'HelloWorld', message?: string | null } | null };
+export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string, role: string, position: string, name: string } };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -209,6 +212,16 @@ export const DeleteAccountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export const MeDocument = new TypedDocumentString(`
+    query Me {
+  me {
+    email
+    role
+    position
+    name
+  }
+}
+    `) as unknown as TypedDocumentString<MeQuery, MeQueryVariables>;
 export const CreateUserDocument = new TypedDocumentString(`
     mutation CreateUser($input: AccountInput!) {
   createAccount(input: $input) {
@@ -239,13 +252,8 @@ export const LoginDocument = new TypedDocumentString(`
     token
     email
     role
+    position
+    name
   }
 }
     `) as unknown as TypedDocumentString<LoginMutation, LoginMutationVariables>;
-export const HelloWorldDocument = new TypedDocumentString(`
-    query HelloWorld {
-  helloWorld {
-    message
-  }
-}
-    `) as unknown as TypedDocumentString<HelloWorldQuery, HelloWorldQueryVariables>;

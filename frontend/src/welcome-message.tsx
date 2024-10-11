@@ -1,25 +1,10 @@
-import { useQuery } from "react-query";
-import { gql } from "./graphql";
-import { gqlRequest } from "./lib/graphql-client";
-
-const HELLO_WORLD = gql(`
-  query HelloWorld {
-    helloWorld {
-      message
-    }
-  }
-`);
+import { useUser } from "./hooks/store";
 
 const WelcomeMessage = () => {
-  const {isLoading, isSuccess, data} = useQuery({
-    queryFn: () => gqlRequest(HELLO_WORLD),
-  });
+  const user = useUser();
 
   return (
-    <div className="text-center text-lg font-bold">
-      {isLoading && "Loading.."}
-      {isSuccess && data.data.helloWorld?.message}
-    </div>
+    <div className="text-center text-lg font-bold">Hello {user?.name || "guess"}!</div>
   );
 };
 

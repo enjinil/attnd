@@ -2,7 +2,6 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Users do
   alias AttendanceApi.Accounts
 
   def all(_, args, _) do
-    IO.inspect(Map.get(args, :query))
     {:ok, AttendanceApi.Accounts.all_users(Map.get(args, :query))}
   end
 
@@ -39,6 +38,14 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Users do
         {:error, "Could not delete user"}
       {:ok, _} = _ ->
         {:ok, %{message: "Successfully deleted user!"}}
+    end
+  end
+
+  def me(_, _, resolution) do
+    with %{current_user: current_user} <- resolution.context do
+      {:ok, current_user}
+    else
+      _ -> {:error, "Unauthorized!"}
     end
   end
 end
