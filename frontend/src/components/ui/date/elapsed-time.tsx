@@ -1,25 +1,23 @@
 import { useState, useEffect } from 'react';
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime"
+import { ReadableDuration } from './readable-duration';
 
-dayjs.extend(relativeTime);
+const ONE_MINUTE = 60000;
 
 const ElapsedTime = ({ date }: { date: Date | string | undefined }) => {
-  const [, setUpdate] = useState(0);
+  const [now, setNow] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setUpdate(prevUpdate => prevUpdate + 1);
-    }, 60000); // Update every 60000 milliseconds (1 minute)
+      setNow(new Date());
+    }, ONE_MINUTE);
 
     return () => clearInterval(timer);
   }, []);
 
-  if (date == undefined) return null;
-  
-  const dateObject = dayjs(date);
+  const startDate = new Date(date || now);
+  const endDate = now;
 
-  return <span>{dateObject.fromNow()}</span>;
+  return <ReadableDuration from={startDate} to={endDate} /> 
 };
 
 export { ElapsedTime };

@@ -1,11 +1,16 @@
-import dayjs from "dayjs";
-
-const FormattedTime = ({ date }: { date: Date | string | undefined }) => {
-  if(date == undefined) return <></>
+const FormattedTime = ({ date }: { date: Date | string | undefined | null }) => {
+  if (date == null || date === undefined) return null;
   
-  const dateObject = dayjs(date);
+  const dateObject = typeof date === 'string' ? new Date(date) : date;
 
-  return <span>{dateObject.format("HH:mm")}</span>;
+  if (!(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
+    return null;
+  }
+
+  const hours = dateObject.getHours().toString().padStart(2, '0');
+  const minutes = dateObject.getMinutes().toString().padStart(2, '0');
+
+  return <span>{`${hours}:${minutes}`}</span>;
 };
 
 export { FormattedTime };
