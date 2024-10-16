@@ -3,6 +3,9 @@ import clsx from "clsx";
 type PaginationProps = {
   total?: number;
   current?: number;
+  disabled?: boolean;
+  onPrev: () => void;
+  onNext: () => void;
 };
 
 const baseClass =
@@ -11,13 +14,14 @@ const disabledClass =
   "pointer-events-none bg-slate-200 border-slate-200 text-slate-500";
 const enabledClass = "text-slate-800 border-slate-300";
 
-const Pagination = ({ total = 0, current = 0 }: PaginationProps) => {
+const Pagination = ({ total = 0, current = 0, onPrev, onNext, disabled = false }: PaginationProps) => {
   const canPrevious = current > 1;
-  const canNext = current < total;
+  const canNext = (current * 10) < total;
 
   return (
     <div className="flex justify-end py-1">
       <button
+        onClick={() => disabled || onPrev()}
         className={clsx(baseClass, canPrevious ? enabledClass : disabledClass)}
       >
         <svg
@@ -37,6 +41,7 @@ const Pagination = ({ total = 0, current = 0 }: PaginationProps) => {
         Previous
       </button>
       <button
+        onClick={() => disabled || onNext()}
         className={clsx(baseClass, canNext ? enabledClass : disabledClass)}
       >
         Next
