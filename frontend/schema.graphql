@@ -21,6 +21,10 @@ input AccountInput {
   role: String!
 }
 
+type Count {
+  count: Int
+}
+
 type DeleteSuccessResponse {
   message: String
 }
@@ -43,10 +47,14 @@ type RootMutationType {
   createAccount(input: AccountInput!): Account
   """Delete user account"""
   deleteAccount(input: String!): DeleteSuccessResponse
+  """End active user session"""
+  endSession: Session
   """Login as user with email and password"""
   login(input: LoginInput!): UserToken!
   """Logout user"""
   logout: LogoutResponse
+  """Create user session or return active session"""
+  startSession: Session!
   """Update new user account"""
   updateAccount(id: String!, input: AccountInput!): Account
 }
@@ -54,9 +62,27 @@ type RootMutationType {
 type RootQueryType {
   account(id: String!): Account!
   accounts(query: String): [Account!]
+  """Get active user session"""
+  activeSession: Session
   """Hello world!"""
   helloWorld: HelloWorld
   me: Account!
+  sessions(query: SessionsQuery): [Session!]
+  todaySessions: [Session]
+  totalSessions(query: SessionsQuery): Count
+}
+
+type Session {
+  endTime: String
+  id: String!
+  note: String
+  startTime: String!
+  userId: String!
+}
+
+input SessionsQuery {
+  page: Int!
+  startDate: String!
 }
 
 type UserToken {

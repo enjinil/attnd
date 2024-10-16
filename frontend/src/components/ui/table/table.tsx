@@ -4,7 +4,7 @@ import React from "react";
 type Alignment = "left" | "right" | "center";
 
 export type ColumnDef<T> = {
-  field: keyof T | "actions";
+  field: keyof T | string;
   title?: string;
   renderContent?: (item: T) => React.ReactNode;
   className?: string;
@@ -24,12 +24,12 @@ export function Table<T extends { id: string | number }>({
 }: TableProps<T>) {
   return (
     <div className="overflow-x-auto">
-      <table className="border-collapse w-full text-sm bg-slate-50 rounded">
+      <table className="border-collapse w-full text-sm bg-slate-50 rounded tabular-nums">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns.map((column) => (
               <th
-                key={index}
+                key={column.title}
                 className={`border-b border-slate-300 font-medium p-2 pl-4 pt-0 pb-2 text-slate-700 ${
                   column.alignment === "right" ? "text-right" : "text-left"
                 }`}
@@ -42,10 +42,10 @@ export function Table<T extends { id: string | number }>({
         </thead>
         <tbody>
           {data.map((item, rowIndex) => (
-            <tr key={item.id}>
+            <tr key={`${rowIndex}-${item.id}`}>
               {columns.map((column, index) => (
                 <td
-                  key={index}
+                  key={`${rowIndex}-${index}`}
                   className={clsx(
                     "border-b border-slate-200 px-4 py-2 text-slate-800",
                     `text-${column.alignment || "left"}`,

@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { Alert } from "../../../components/ui/alert";
 import { Field } from "../../../components/ui/form/field";
 import { Input } from "../../../components/ui/form/input";
@@ -100,77 +100,74 @@ const UserForm = ({ onSuccess = () => null, data, id }: UserFormProps) => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<UserInput>({
+  const form = useForm<UserInput>({
     resolver: zodResolver(userInputSchema),
     defaultValues: data || defaultValues,
   });
 
-  const role = watch("role");
-  const isActive = watch("isActive");
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        saveMutation.mutate(data);
-      })}
-    >
-      <div className="space-y-4">
-        <Field label="Name" error={errors["name"]}>
-          <Input registration={register("name")} />
-        </Field>
+    <FormProvider {...form}>
+      <form
+        onSubmit={handleSubmit((data) => {
+          saveMutation.mutate(data);
+        })}
+      >
+        {JSON.stringify(form.formState.defaultValues)}
+        <div className="space-y-4">
+          <Field label="Name" error={errors["name"]}>
+            <Input name="name" />
+          </Field>
 
-        <Field label="Position" error={errors["position"]}>
-          <Input registration={register("position")} />
-        </Field>
+          <Field label="Position" error={errors["position"]}>
+            <Input name="position" />
+          </Field>
 
-        <Field label="Email" error={errors["email"]}>
-          <Input registration={register("email")} />
-        </Field>
+          <Field label="Email" error={errors["email"]}>
+            <Input name="email" />
+          </Field>
 
-        <Field label="Password" error={errors["password"]}>
-          <Input type="password" registration={register("password")} />
-        </Field>
+          <Field label="Password" error={errors["password"]}>
+            <Input type="password" name="password" />
+          </Field>
 
-        <Field label="Role" error={errors["role"]} separateLabel>
-          <Radio name="role" value={role}>
-            <RadioOption
-              value="admin"
-              label="Admin"
-              registration={register("role")}
+          <Field label="Role" error={errors["role"]} separateLabel>
+            <Radio name="role">
+              <RadioOption
+                value="admin"
+                label="Admin"
+              />
+              <RadioOption
+                value="user"
+                label="User"
+              />
+            </Radio>
+          </Field>
+
+          <Field label="Account Status" error={errors["isActive"]} separateLabel>
+            <Select
+              items={[
+                { value: "true", text: "Active" },
+                { value: "false", text: "Inactive" },
+              ]}
+              name="isActive"
             />
-            <RadioOption
-              value="user"
-              label="User"
-              registration={register("role")}
-            />
-          </Radio>
-        </Field>
+          </Field>
 
-        <Field label="Account Status" error={errors["isActive"]} separateLabel>
-          <Select
-            items={[
-              { value: "true", text: "Active" },
-              { value: "false", text: "Inactive" },
-            ]}
-            value={String(isActive)}
-            registration={register("isActive")}
-          />
-        </Field>
+          {saveMutation.isError && (
+            <Alert type="error" message="Failed to save user." />
+          )}
 
-        {saveMutation.isError && (
-          <Alert type="error" message="Failed to save user." />
-        )}
-
-        <div className="flex justify-end pt-4">
-          <Button type="submit">{id ? "Save Changes" : "Create User"}</Button>
+          <div className="flex justify-end pt-4">
+            <Button type="submit">{id ? "Save Changes" : "Create User"}</Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 };
 
