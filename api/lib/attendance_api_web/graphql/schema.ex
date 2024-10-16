@@ -7,6 +7,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
 
   import_types __MODULE__.ContentTypes
   import_types __MODULE__.AccountsTypes
+  import_types __MODULE__.SessionsTypes
 
   query do
     @desc "Hello world!"
@@ -28,6 +29,29 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       arg :id, non_null(:string)
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Users.fetch_user_by_id/3
+    end
+
+    field :today_sessions, list_of(:session) do
+      middleware Middleware.Authorize, "user"
+      resolve &Resolvers.Sessions.today_sessions/3
+    end
+
+    @desc "Get active user session"
+    field :active_session, :session do
+      middleware Middleware.Authorize, "user"
+      resolve &Resolvers.Sessions.active_session/3
+    end
+
+    field :sessions, list_of(non_null(:session)) do
+      arg :query, :sessions_query
+      middleware Middleware.Authorize, "user"
+      resolve &Resolvers.Sessions.sessions/3
+    end
+
+    field :total_sessions, :count do
+      arg :query, :sessions_query
+      middleware Middleware.Authorize, "user"
+      resolve &Resolvers.Sessions.total_sessions/3
     end
   end
 
@@ -65,6 +89,18 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       arg :input, non_null(:string)
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Users.delete_account/3
+    end
+
+    @desc "Create user session or return active session"
+    field :start_session, non_null(:session) do
+      middleware Middleware.Authorize, "user"
+      resolve &Resolvers.Sessions.start_session/3
+    end
+
+    @desc "End active user session"
+    field :end_session, :session do
+      middleware Middleware.Authorize, "user"
+      resolve &Resolvers.Sessions.end_session/3
     end
   end
 

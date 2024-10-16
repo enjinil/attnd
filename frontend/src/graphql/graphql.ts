@@ -35,6 +35,11 @@ export type AccountInput = {
   role: Scalars['String']['input'];
 };
 
+export type Count = {
+  __typename?: 'Count';
+  count?: Maybe<Scalars['Int']['output']>;
+};
+
 export type DeleteSuccessResponse = {
   __typename?: 'DeleteSuccessResponse';
   message?: Maybe<Scalars['String']['output']>;
@@ -61,10 +66,14 @@ export type RootMutationType = {
   createAccount?: Maybe<Account>;
   /** Delete user account */
   deleteAccount?: Maybe<DeleteSuccessResponse>;
+  /** End active user session */
+  endSession?: Maybe<Session>;
   /** Login as user with email and password */
   login: UserToken;
   /** Logout user */
   logout?: Maybe<LogoutResponse>;
+  /** Create user session or return active session */
+  startSession: Session;
   /** Update new user account */
   updateAccount?: Maybe<Account>;
 };
@@ -94,9 +103,14 @@ export type RootQueryType = {
   __typename?: 'RootQueryType';
   account: Account;
   accounts?: Maybe<Array<Account>>;
+  /** Get active user session */
+  activeSession?: Maybe<Session>;
   /** Hello world! */
   helloWorld?: Maybe<HelloWorld>;
   me: Account;
+  sessions?: Maybe<Array<Session>>;
+  todaySessions?: Maybe<Array<Maybe<Session>>>;
+  totalSessions?: Maybe<Count>;
 };
 
 
@@ -107,6 +121,30 @@ export type RootQueryTypeAccountArgs = {
 
 export type RootQueryTypeAccountsArgs = {
   query?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type RootQueryTypeSessionsArgs = {
+  query?: InputMaybe<SessionsQuery>;
+};
+
+
+export type RootQueryTypeTotalSessionsArgs = {
+  query?: InputMaybe<SessionsQuery>;
+};
+
+export type Session = {
+  __typename?: 'Session';
+  endTime?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  startTime: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+};
+
+export type SessionsQuery = {
+  page: Scalars['Int']['input'];
+  startDate: Scalars['String']['input'];
 };
 
 export type UserToken = {
@@ -143,6 +181,28 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'RootQueryType', me: { __typename?: 'Account', email: string, role: string, position: string, name: string } };
+
+export type UserTodaySessionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserTodaySessionsQuery = { __typename?: 'RootQueryType', todaySessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null> | null, activeSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
+
+export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartSessionMutation = { __typename?: 'RootMutationType', startSession: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } };
+
+export type EndSessionMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EndSessionMutation = { __typename?: 'RootMutationType', endSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
+
+export type UserSessionsQueryVariables = Exact<{
+  query?: InputMaybe<SessionsQuery>;
+}>;
+
+
+export type UserSessionsQuery = { __typename?: 'RootQueryType', sessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessions?: { __typename?: 'Count', count?: number | null } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: AccountInput;
@@ -222,6 +282,60 @@ export const MeDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<MeQuery, MeQueryVariables>;
+export const UserTodaySessionsDocument = new TypedDocumentString(`
+    query UserTodaySessions {
+  todaySessions {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+  activeSession {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+}
+    `) as unknown as TypedDocumentString<UserTodaySessionsQuery, UserTodaySessionsQueryVariables>;
+export const StartSessionDocument = new TypedDocumentString(`
+    mutation StartSession {
+  startSession {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+}
+    `) as unknown as TypedDocumentString<StartSessionMutation, StartSessionMutationVariables>;
+export const EndSessionDocument = new TypedDocumentString(`
+    mutation EndSession {
+  endSession {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+}
+    `) as unknown as TypedDocumentString<EndSessionMutation, EndSessionMutationVariables>;
+export const UserSessionsDocument = new TypedDocumentString(`
+    query UserSessions($query: SessionsQuery) {
+  sessions(query: $query) {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+  totalSessions(query: $query) {
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<UserSessionsQuery, UserSessionsQueryVariables>;
 export const CreateUserDocument = new TypedDocumentString(`
     mutation CreateUser($input: AccountInput!) {
   createAccount(input: $input) {

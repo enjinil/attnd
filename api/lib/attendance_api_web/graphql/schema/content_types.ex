@@ -25,4 +25,8 @@ defmodule AttendanceApiWeb.GraphQl.Schema.ContentTypes do
   object :delete_success_response do
     field :message, :string
   end
+
+  object :count do
+    field :count, :integer
+  end
 end
