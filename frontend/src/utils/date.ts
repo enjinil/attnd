@@ -11,7 +11,7 @@ export const formatDate = (date: Date | string | null | undefined): string => {
   const month = (d.getMonth() + 1).toString().padStart(2, "0"); // getMonth() returns 0-11
   const day = d.getDate().toString().padStart(2, "0");
 
-  return `${year}-${month}-${day}`;
+  return `${year}/${month}/${day}`;
 };
 
 export const formatDatetime = (date: Date) => {
