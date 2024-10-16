@@ -1,89 +1,51 @@
-import {
-  forwardRef,
-  useEffect,
-  useId,
-  useImperativeHandle,
-  useRef,
-} from "react";
-import { Input } from "./input";
-import { easepick } from "@easepick/bundle";
-import css from "@easepick/bundle/dist/index.css?inline";
-import { UseFormRegisterReturn } from "react-hook-form";
-import clsx from "clsx";
+import { forwardRef, ReactElement } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useController, useFormContext } from "react-hook-form";
+import { formatDate } from "../../../utils/date";
 
-export interface DatepickerProps {
+type DatepickerProps = {
+  children?: ReactElement;
   className?: string;
-  type?: React.HTMLInputTypeAttribute;
-  registration?: UseFormRegisterReturn;
-  value?: string;
-  placeholder?: string;
-  readonly?: boolean;
-  autoComplete?: "off" | "on";
-  children?: (
-    value: string | null | undefined,
-    open: () => void
-  ) => React.ReactNode;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-}
+  name: string;
+};
 
-export type InputRef = HTMLInputElement;
-
-const Datepicker = forwardRef<InputRef, DatepickerProps>((props, ref) => {
-  const internalRef = useRef<InputRef>(null);
-  const inputId = useId();
-
-  useImperativeHandle(
-    ref,
-    () => {
-      return internalRef.current as InputRef;
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (!internalRef || !internalRef.current) return;
-
-    internalRef.current.id = inputId;
-
-    new easepick.create({
-      element: internalRef.current,
-      css: css,
-      zIndex: 10,
-      setup(picker) {
-        picker.on("select", () => {
-          const input = internalRef.current as HTMLInputElement;
-          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-            window.HTMLInputElement.prototype,
-            "value"
-          )?.set;
-
-          const value = input.value;
-          input.value = "";
-          nativeInputValueSetter?.call(input, value);
-
-          const event = new Event("input", { bubbles: true });
-          input?.dispatchEvent(event);
-        });
-      },
-    });
-  }, []);
-
+const DatepickerInput = forwardRef<HTMLInputElement>((props, ref) => {
   return (
-    <div>
-      <div className={clsx("h-0 w-0 overflow-hidden")}>
-        <Input
-          ref={internalRef}
-          value={props.value}
-          onChange={props.onChange}
-        />
-      </div>
-      <div className="flex">
-        {props.children?.(props.value, () => {
-          internalRef.current?.click();
-        })}
-      </div>
-    </div>
+    <input
+      className={
+        "px-3 text-gray-700 border w-full block h-8 mb-1 border-gray-300 focus:ring-2"
+      }
+      autoComplete="off"
+      readOnly
+      ref={ref}
+      {...props}
+    />
   );
 });
+
+const Datepicker: React.FC<DatepickerProps> = ({
+  name,
+  children,
+  className,
+}) => {
+  const { control } = useFormContext();
+  const { field } = useController({
+    control,
+    name: name,
+    defaultValue: "",
+  });
+
+  return (
+    <div className={className}>
+      <DatePicker
+        value={field.value}
+        onChange={(dateValue) => field.onChange(formatDate(dateValue))}
+        customInput={children || <DatepickerInput />}
+        dateFormat="YYYY/MM/dd"
+      />
+    </div>
+  );
+};
 
 export { Datepicker };

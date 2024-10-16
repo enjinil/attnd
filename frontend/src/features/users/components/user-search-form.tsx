@@ -11,7 +11,7 @@ type UserSearchInput = z.infer<typeof userSearchInputSchema>;
 
 type UserSearchFormProps = {
   form: UseFormReturn<UserSearchInput>;
-  onSubmit: (data: UserSearchInput) => void;
+  onSubmit?: (data: UserSearchInput) => void;
 };
 
 const useSearchForm = () =>
@@ -24,12 +24,9 @@ const UserSearchForm = ({ form, onSubmit }: UserSearchFormProps) => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit || (() => null))}>
         <div className="w-40">
-          <Input
-            name="query"
-            placeholder="Search keyword"
-          />
+          <Input name="query" placeholder="Search keyword" />
         </div>
       </form>
     </FormProvider>
