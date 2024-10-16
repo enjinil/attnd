@@ -1,15 +1,16 @@
 import { clsx } from "clsx";
 import { useCombobox } from "downshift";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 type SelectProps = {
   items: { value: string; text: string }[];
-  value?: string;
+  name: string;
   placeholder?: string;
-  registration?: UseFormRegisterReturn;
 };
 
-const Select = ({ items, placeholder, value, registration }: SelectProps) => {
+const Select = ({ items, placeholder, name }: SelectProps) => {
+  const { watch, register } = useFormContext();
+  const value = watch(name).toString();
   const {
     isOpen,
     selectedItem,
@@ -22,7 +23,7 @@ const Select = ({ items, placeholder, value, registration }: SelectProps) => {
     items,
     itemToString: (item) => (item ? item.value : ""),
     initialInputValue: value,
-    initialSelectedItem: items.find(item => item.value === value)
+    initialSelectedItem: items.find((item) => item.value === value),
   });
 
   return (
@@ -31,7 +32,7 @@ const Select = ({ items, placeholder, value, registration }: SelectProps) => {
         <input
           placeholder={placeholder || ""}
           className="w-full pl-3 bg-white border h-8 mb-1 border-gray-300 focus:ring-2"
-          {...getInputProps({ ...registration })}
+          {...getInputProps({ ...register(name) })}
           readOnly
         />
         <div className="absolute pl-3 leading-[30px] bg-white top-[1px] right-[1px] left-[1px] h-[30px] pointer-events-none">

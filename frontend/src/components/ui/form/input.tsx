@@ -1,5 +1,5 @@
 import * as React from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
 import clsx from "clsx";
 
 export interface InputProps {
@@ -11,11 +11,14 @@ export interface InputProps {
   readonly?: boolean;
   autoComplete?: "off" | "on";
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  name: string;
 }
 export type InputRef = HTMLInputElement;
 
-const Input = React.forwardRef<InputRef, InputProps>(
-  ({ className, type, registration, autoComplete, ...props }, ref) => {
+const Input: React.FC<InputProps> = (
+  ({ className, type, autoComplete, name, ...props }) => {
+    const { register } = useFormContext();
+
     return (
       <input
         type={type}
@@ -24,8 +27,7 @@ const Input = React.forwardRef<InputRef, InputProps>(
           className
         )}
         autoComplete={autoComplete || "off"}
-        ref={ref}
-        {...registration}
+        {...register(name)}
         {...props}
       />
     );

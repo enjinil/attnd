@@ -1,4 +1,4 @@
-import { useForm, UseFormReturn } from "react-hook-form";
+import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 import { Input } from "../../../components/ui/form/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,21 +14,25 @@ type UserSearchFormProps = {
   onSubmit: (data: UserSearchInput) => void;
 };
 
-const useSearchForm = () => useForm<UserSearchInput>({
-  resolver: zodResolver(userSearchInputSchema),
-});
+const useSearchForm = () =>
+  useForm<UserSearchInput>({
+    resolver: zodResolver(userSearchInputSchema),
+  });
 
 const UserSearchForm = ({ form, onSubmit }: UserSearchFormProps) => {
-  const { register, handleSubmit } = form;
+  const { handleSubmit } = form;
 
   return (
-    <div>
+    <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-40">
-          <Input registration={register("query")} placeholder="Search keyword" />
+          <Input
+            name="query"
+            placeholder="Search keyword"
+          />
         </div>
       </form>
-    </div>
+    </FormProvider>
   );
 };
 
