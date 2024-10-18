@@ -127,9 +127,7 @@ const UsersPage = () => {
           <Button to="/users/new">New User</Button>
         </div>
       </div>
-      <div className="border border-slate-300 bg-slate-50 rounded pt-2 mb-2">
-        <Table {...usersTable.props} />
-      </div>
+      <Table className="mb-2" {...usersTable.props} />
       <ConfirmDialog />
     </DashboardLayout>
   );
