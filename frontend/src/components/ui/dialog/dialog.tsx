@@ -3,8 +3,8 @@ import { Button } from "../button";
 
 interface DialogProps {
   open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
+  onClose?: () => void;
+  onConfirm?: () => void;
   title?: string;
   children: ReactNode;
   confirmText?: string;
@@ -44,19 +44,19 @@ const Dialog = ({
 
       <div className="relative bg-white rounded-lg shadow-lg min-w-[300px] max-w-md w-full mx-4">
         <div className="p-6">
-          <h2 className="text-lg font-semibold mb-4">{title}</h2>
+          <h2 className="font-semibold mb-4">{title}</h2>
           <div className="mb-6 text-gray-600">{children}</div>
 
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={onClose}>
               {cancelText}
             </Button>
-            <Button
+            {onConfirm && <Button
               onClick={onConfirm}
               className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
             >
               {confirmText}
-            </Button>
+            </Button>}
           </div>
         </div>
       </div>

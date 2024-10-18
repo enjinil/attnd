@@ -1,5 +1,6 @@
 defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
   alias AttendanceApi.Repo
+  alias AttendanceApi.Accounts.User
   alias AttendanceApi.Attendance.Session
 
   import Ecto.Query, warn: false
@@ -49,7 +50,8 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
 
   def sessions(_, args, resolution) do
     with %{current_user: current_user} <- resolution.context do
-      offset = (get_page(args) - 1) * 10
+      page = get_params_field(args, :page, 1)
+      offset = (page - 1) * 10
 
       query = user_sessions_query(current_user.id)
       |> where([s], not is_nil(s.end_time))
@@ -75,10 +77,35 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
     end
   end
 
+  def user_sessions(_, args, _) do
+    if (get_params_field(args, :start_date) == "") do
+      {:ok, []}
+    else
+      user_query = from u in User, select: struct(u, [:id, :email, :name, :position])
+      sessions_query = (from s in Session, select: struct(s, [:id, :start_time, :end_time, :note, :user_id]))
+        |> order_by([s], desc: s.id)
+        |> maybe_filter_by_start_date(args)
+
+      query = from s in sessions_query,
+        preload: [user: ^user_query]
+
+      {:ok, Repo.all(query)}
+    end
+  end
+
+  def total_user_sessions(_, args, _) do
+    if (get_params_field(args, :start_date) == "") do
+      {:ok, %{count: 0}}
+    else
+      query = from s in Session, select: count()
+      count = query |> maybe_filter_by_start_date(args) |> Repo.one()
+
+      {:ok, %{count: count}}
+    end
+  end
+
   defp maybe_filter_by_start_date(query, params) do
-    date_string = params
-    |> Map.get(:query, %{})
-    |> Map.get(:start_date, 1)
+    date_string = get_params_field(params, :start_date)
 
     if date_string not in [nil, ""] do
       query |> where([s], fragment("?::date", s.start_time) == ^Date.from_iso8601!(date_string |> String.replace("/", "-")))
@@ -87,10 +114,10 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
     end
   end
 
-  defp get_page(params \\ %{}) do
+  defp get_params_field(params, field, default \\ "") do
     params
-    |> Map.get(:query, %{})
-    |> Map.get(:page, 1)
+    |> Map.get(:params, %{})
+    |> Map.get(field, "")
   end
 
   defp active_session_by_user(user_id) do

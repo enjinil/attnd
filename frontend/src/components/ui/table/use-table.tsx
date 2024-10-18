@@ -13,9 +13,7 @@ export function useTable<T extends { id: string | number }>({
   const columns = useMemo(() => {
     return columnDefs.map((column) => ({
       ...column,
-      renderContent:
-        column.renderContent ||
-        ((item) => String(item[column.field as keyof T])),
+      renderContent: column.renderContent,
     }));
   }, [columnDefs]);
 

@@ -111,6 +111,8 @@ export type RootQueryType = {
   sessions?: Maybe<Array<Session>>;
   todaySessions?: Maybe<Array<Maybe<Session>>>;
   totalSessions?: Maybe<Count>;
+  totalUserSessions?: Maybe<Count>;
+  userSessions?: Maybe<Array<SessionWithUser>>;
 };
 
 
@@ -125,12 +127,32 @@ export type RootQueryTypeAccountsArgs = {
 
 
 export type RootQueryTypeSessionsArgs = {
-  query?: InputMaybe<SessionsQuery>;
+  params?: InputMaybe<SessionsParams>;
 };
 
 
 export type RootQueryTypeTotalSessionsArgs = {
-  query?: InputMaybe<SessionsQuery>;
+  params?: InputMaybe<SessionsParams>;
+};
+
+
+export type RootQueryTypeTotalUserSessionsArgs = {
+  params?: InputMaybe<UserSessionsParams>;
+};
+
+
+export type RootQueryTypeUserSessionsArgs = {
+  params?: InputMaybe<UserSessionsParams>;
+};
+
+export type RootSubscriptionType = {
+  __typename?: 'RootSubscriptionType';
+  updatedSessions?: Maybe<Session>;
+};
+
+
+export type RootSubscriptionTypeUpdatedSessionsArgs = {
+  token: Scalars['String']['input'];
 };
 
 export type Session = {
@@ -142,8 +164,30 @@ export type Session = {
   userId: Scalars['String']['output'];
 };
 
-export type SessionsQuery = {
+export type SessionUser = {
+  __typename?: 'SessionUser';
+  email: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  position: Scalars['String']['output'];
+};
+
+export type SessionWithUser = {
+  __typename?: 'SessionWithUser';
+  endTime?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  startTime: Scalars['String']['output'];
+  user: SessionUser;
+  userId: Scalars['String']['output'];
+};
+
+export type SessionsParams = {
   page: Scalars['Int']['input'];
+  startDate: Scalars['String']['input'];
+};
+
+export type UserSessionsParams = {
   startDate: Scalars['String']['input'];
 };
 
@@ -155,6 +199,54 @@ export type UserToken = {
   role: Scalars['String']['output'];
   token: Scalars['String']['output'];
 };
+
+export type UpdatedSessionsSubscriptionSubscriptionVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+
+export type UpdatedSessionsSubscriptionSubscription = { __typename?: 'RootSubscriptionType', updatedSessions?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, userId: string } | null };
+
+export type LoginMutationVariables = Exact<{
+  input: LoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string, role: string, position: string, name: string } };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'RootQueryType', me: { __typename?: 'Account', email: string, role: string, position: string, name: string } };
+
+export type UserSessionsQueryVariables = Exact<{
+  params?: InputMaybe<SessionsParams>;
+}>;
+
+
+export type UserSessionsQuery = { __typename?: 'RootQueryType', sessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessions?: { __typename?: 'Count', count?: number | null } | null };
+
+export type AdminUserSessionsQueryVariables = Exact<{
+  params?: InputMaybe<UserSessionsParams>;
+}>;
+
+
+export type AdminUserSessionsQuery = { __typename?: 'RootQueryType', userSessions?: Array<{ __typename?: 'SessionWithUser', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string, user: { __typename?: 'SessionUser', id: string, email: string, name: string, position: string } }> | null, totalUserSessions?: { __typename?: 'Count', count?: number | null } | null };
+
+export type UserTodaySessionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserTodaySessionsQuery = { __typename?: 'RootQueryType', todaySessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null> | null, activeSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
+
+export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartSessionMutation = { __typename?: 'RootMutationType', startSession: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } };
+
+export type EndSessionMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EndSessionMutation = { __typename?: 'RootMutationType', endSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -177,33 +269,6 @@ export type DeleteAccountMutationVariables = Exact<{
 
 export type DeleteAccountMutation = { __typename?: 'RootMutationType', deleteAccount?: { __typename?: 'DeleteSuccessResponse', message?: string | null } | null };
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MeQuery = { __typename?: 'RootQueryType', me: { __typename?: 'Account', email: string, role: string, position: string, name: string } };
-
-export type UserTodaySessionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserTodaySessionsQuery = { __typename?: 'RootQueryType', todaySessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null> | null, activeSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
-
-export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StartSessionMutation = { __typename?: 'RootMutationType', startSession: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } };
-
-export type EndSessionMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type EndSessionMutation = { __typename?: 'RootMutationType', endSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
-
-export type UserSessionsQueryVariables = Exact<{
-  query?: InputMaybe<SessionsQuery>;
-}>;
-
-
-export type UserSessionsQuery = { __typename?: 'RootQueryType', sessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessions?: { __typename?: 'Count', count?: number | null } | null };
-
 export type CreateUserMutationVariables = Exact<{
   input: AccountInput;
 }>;
@@ -218,13 +283,6 @@ export type UpdateAccountMutationVariables = Exact<{
 
 
 export type UpdateAccountMutation = { __typename?: 'RootMutationType', updateAccount?: { __typename?: 'Account', id: string, name: string, email: string, role: string, position: string, isActive: boolean } | null };
-
-export type LoginMutationVariables = Exact<{
-  input: LoginInput;
-}>;
-
-
-export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string, role: string, position: string, name: string } };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -241,37 +299,27 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const AccountDocument = new TypedDocumentString(`
-    query Account($id: String!) {
-  account(id: $id) {
+export const UpdatedSessionsSubscriptionDocument = new TypedDocumentString(`
+    subscription UpdatedSessionsSubscription($token: String!) {
+  updatedSessions(token: $token) {
     id
+    startTime
+    endTime
+    userId
+  }
+}
+    `) as unknown as TypedDocumentString<UpdatedSessionsSubscriptionSubscription, UpdatedSessionsSubscriptionSubscriptionVariables>;
+export const LoginDocument = new TypedDocumentString(`
+    mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    token
     email
     role
     position
     name
-    isActive
   }
 }
-    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
-export const UserAccountsDocument = new TypedDocumentString(`
-    query UserAccounts($query: String) {
-  accounts(query: $query) {
-    id
-    email
-    role
-    position
-    name
-    isActive
-  }
-}
-    `) as unknown as TypedDocumentString<UserAccountsQuery, UserAccountsQueryVariables>;
-export const DeleteAccountDocument = new TypedDocumentString(`
-    mutation DeleteAccount($input: String!) {
-  deleteAccount(input: $input) {
-    message
-  }
-}
-    `) as unknown as TypedDocumentString<DeleteAccountMutation, DeleteAccountMutationVariables>;
+    `) as unknown as TypedDocumentString<LoginMutation, LoginMutationVariables>;
 export const MeDocument = new TypedDocumentString(`
     query Me {
   me {
@@ -282,6 +330,40 @@ export const MeDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<MeQuery, MeQueryVariables>;
+export const UserSessionsDocument = new TypedDocumentString(`
+    query UserSessions($params: SessionsParams) {
+  sessions(params: $params) {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+  totalSessions(params: $params) {
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<UserSessionsQuery, UserSessionsQueryVariables>;
+export const AdminUserSessionsDocument = new TypedDocumentString(`
+    query AdminUserSessions($params: UserSessionsParams) {
+  userSessions(params: $params) {
+    id
+    startTime
+    endTime
+    note
+    userId
+    user {
+      id
+      email
+      name
+      position
+    }
+  }
+  totalUserSessions(params: $params) {
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<AdminUserSessionsQuery, AdminUserSessionsQueryVariables>;
 export const UserTodaySessionsDocument = new TypedDocumentString(`
     query UserTodaySessions {
   todaySessions {
@@ -322,20 +404,37 @@ export const EndSessionDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<EndSessionMutation, EndSessionMutationVariables>;
-export const UserSessionsDocument = new TypedDocumentString(`
-    query UserSessions($query: SessionsQuery) {
-  sessions(query: $query) {
+export const AccountDocument = new TypedDocumentString(`
+    query Account($id: String!) {
+  account(id: $id) {
     id
-    startTime
-    endTime
-    note
-    userId
-  }
-  totalSessions(query: $query) {
-    count
+    email
+    role
+    position
+    name
+    isActive
   }
 }
-    `) as unknown as TypedDocumentString<UserSessionsQuery, UserSessionsQueryVariables>;
+    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
+export const UserAccountsDocument = new TypedDocumentString(`
+    query UserAccounts($query: String) {
+  accounts(query: $query) {
+    id
+    email
+    role
+    position
+    name
+    isActive
+  }
+}
+    `) as unknown as TypedDocumentString<UserAccountsQuery, UserAccountsQueryVariables>;
+export const DeleteAccountDocument = new TypedDocumentString(`
+    mutation DeleteAccount($input: String!) {
+  deleteAccount(input: $input) {
+    message
+  }
+}
+    `) as unknown as TypedDocumentString<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const CreateUserDocument = new TypedDocumentString(`
     mutation CreateUser($input: AccountInput!) {
   createAccount(input: $input) {
@@ -360,14 +459,3 @@ export const UpdateAccountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UpdateAccountMutation, UpdateAccountMutationVariables>;
-export const LoginDocument = new TypedDocumentString(`
-    mutation Login($input: LoginInput!) {
-  login(input: $input) {
-    token
-    email
-    role
-    position
-    name
-  }
-}
-    `) as unknown as TypedDocumentString<LoginMutation, LoginMutationVariables>;

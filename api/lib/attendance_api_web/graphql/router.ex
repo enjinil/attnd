@@ -8,12 +8,13 @@ defmodule AttendanceApiWeb.GraphQl.Router do
     to: Absinthe.Plug.GraphiQL,
     init_opts: [
       interface: :playground,
-      schema: AttendanceApiWeb.GraphQl.Schema
+      schema: AttendanceApiWeb.GraphQl.Schema,
+      socket: AttendanceApiWeb.UserSocket
     ]
 
   forward "/",
     to: Absinthe.Plug,
     init_opts: [
-      schema: AttendanceApiWeb.GraphQl.Schema
+      schema: AttendanceApiWeb.GraphQl.Schema,
     ]
 end

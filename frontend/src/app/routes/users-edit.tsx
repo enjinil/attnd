@@ -2,23 +2,10 @@ import { useParams } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import UserForm from "../../features/users/components/user-form";
-import { gql } from "../../graphql";
 import { useQuery } from "react-query";
 import { gqlRequest } from "../../lib/graphql-client";
 import { useNotify } from "../../hooks/useNotify";
-
-const ACCOUNT = gql(`
-  query Account($id: String!) {
-    account(id: $id) {
-      id
-      email
-      role
-      position
-      name
-      isActive
-    }
-  }  
-`);
+import { ACCOUNT } from "../../features/users/user-gqls";
 
 const UsersEditPage = () => {
   const params = useParams();

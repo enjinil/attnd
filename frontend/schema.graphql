@@ -1,6 +1,7 @@
 schema {
   query: RootQueryType
   mutation: RootMutationType
+  subscription: RootSubscriptionType
 }
 
 type Account {
@@ -67,9 +68,15 @@ type RootQueryType {
   """Hello world!"""
   helloWorld: HelloWorld
   me: Account!
-  sessions(query: SessionsQuery): [Session!]
+  sessions(params: SessionsParams): [Session!]
   todaySessions: [Session]
-  totalSessions(query: SessionsQuery): Count
+  totalSessions(params: SessionsParams): Count
+  totalUserSessions(params: UserSessionsParams): Count
+  userSessions(params: UserSessionsParams): [SessionWithUser!]
+}
+
+type RootSubscriptionType {
+  updatedSessions(token: String!): Session
 }
 
 type Session {
@@ -80,8 +87,28 @@ type Session {
   userId: String!
 }
 
-input SessionsQuery {
+type SessionUser {
+  email: String!
+  id: String!
+  name: String!
+  position: String!
+}
+
+type SessionWithUser {
+  endTime: String
+  id: String!
+  note: String
+  startTime: String!
+  user: SessionUser!
+  userId: String!
+}
+
+input SessionsParams {
   page: Int!
+  startDate: String!
+}
+
+input UserSessionsParams {
   startDate: String!
 }
 

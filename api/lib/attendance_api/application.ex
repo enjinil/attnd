@@ -17,7 +17,8 @@ defmodule AttendanceApi.Application do
       # Start a worker by calling: AttendanceApi.Worker.start_link(arg)
       # {AttendanceApi.Worker, arg},
       # Start to serve requests, typically the last entry
-      AttendanceApiWeb.Endpoint
+      AttendanceApiWeb.Endpoint,
+      {Absinthe.Subscription, AttendanceApiWeb.Endpoint}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

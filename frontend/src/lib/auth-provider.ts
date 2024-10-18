@@ -1,19 +1,7 @@
 import { z } from "zod";
 import { gqlRequest } from "./graphql-client";
 import { env } from "../config";
-import { gql } from "../graphql";
-
-const LOGIN = gql(`
-  mutation Login($input: LoginInput!) {
-    login(input: $input) {
-      token
-      email
-      role
-      position
-      name
-    }
-  }
-`);
+import { LOGIN } from "../features/auth/auth-gqls";
 
 const LOCAL_STORAGE_KEY = env.USER_AUTH_LOCAL_STORAGE_KEY || "USER_AUTH";
 

@@ -1,20 +1,9 @@
 import { useEffect, useState } from "react";
 import { getToken, logout } from "../../../lib/auth-provider";
-import { gql } from "../../../graphql";
 import { gqlRequest } from "../../../lib/graphql-client";
 import { useAppDispatch } from "../../../hooks/store";
 import { userLoggedIn } from "../store/auth-slice";
-
-const ME = gql(`
-  query Me{
-    me {
-      email
-      role
-      position
-      name
-    }
-  }
-`);
+import { ME } from "../auth-gqls";
 
 export default function useBootstrapUser() {
   const token = getToken();

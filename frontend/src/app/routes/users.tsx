@@ -4,7 +4,6 @@ import { CellButton } from "../../components/ui/cell-button";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { useTable } from "../../components/ui/table";
 import Table from "../../components/ui/table/table";
-import { gql } from "../../graphql";
 import { gqlRequest } from "../../lib/graphql-client";
 import { useConfirm } from "../../hooks/useConfirm";
 import { queryClient } from "../../lib/react-query";
@@ -14,27 +13,7 @@ import {
   useSearchForm,
 } from "../../features/users/components/user-search-form";
 import { useState } from "react";
-
-const USER_ACCOUNTS = gql(`
-  query UserAccounts($query: String) {
-    accounts(query: $query) {
-      id
-      email
-      role
-      position
-      name
-      isActive
-    }
-  }
-`);
-
-const DELETE_USER = gql(`
-  mutation DeleteAccount($input: String!) {
-    deleteAccount(input: $input) {
-      message
-    }
-  }
-`);
+import { DELETE_USER, USER_ACCOUNTS } from "../../features/users/user-gqls";
 
 const UsersPage = () => {
   const notify = useNotify();
@@ -89,6 +68,16 @@ const UsersPage = () => {
         },
       },
       {
+        field: "sessions",
+        title: "",
+        width: "80px",
+        renderContent(item) {
+          return (
+            <CellButton to={`/user-sessions/${item.id}`}>sessions</CellButton>
+          );
+        },
+      },
+      {
         field: "actions",
         alignment: "right",
         width: "140px",
@@ -127,9 +116,7 @@ const UsersPage = () => {
           <Button to="/users/new">New User</Button>
         </div>
       </div>
-      <div className="border border-slate-300 bg-slate-50 rounded pt-2 mb-2">
-        <Table {...usersTable.props} />
-      </div>
+      <Table className="mb-2" {...usersTable.props} />
       <ConfirmDialog />
     </DashboardLayout>
   );

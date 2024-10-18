@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { getField } from "../../../utils/object";
 
 type Alignment = "left" | "right" | "center";
 
@@ -16,16 +17,23 @@ export type ColumnDef<T> = {
 export type TableProps<T> = {
   data: T[];
   columns: ColumnDef<T>[];
+  className?: string;
 };
 
 export function Table<T extends { id: string | number }>({
   data,
   columns,
+  className,
 }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto">
+    <div
+      className={clsx(
+        "border border-slate-300 bg-slate-50 rounded pt-2 overflow-x-auto",
+        className
+      )}
+    >
       <table className="border-collapse w-full text-sm bg-slate-50 rounded tabular-nums">
-        <thead>
+        <thead className="whitespace-nowrap">
           <tr>
             {columns.map((column) => (
               <th
@@ -57,7 +65,7 @@ export function Table<T extends { id: string | number }>({
                   {column.renderContent
                     ? column.renderContent(item)
                     : column.field !== "actions"
-                    ? String(item[column.field])
+                    ? getField(item, column.field as string)
                     : null}
                 </td>
               ))}
