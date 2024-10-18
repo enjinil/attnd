@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { getField } from "../../../utils/object";
 
 type Alignment = "left" | "right" | "center";
 
@@ -18,31 +19,6 @@ export type TableProps<T> = {
   columns: ColumnDef<T>[];
   className?: string;
 };
-
-function getFieldContent<T extends object>(
-  item: T | null | undefined,
-  field: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any {
-  if (!item || !field) {
-    return "";
-  }
-
-  // Handle nested fields by splitting on dots
-  const fields = field.split(".");
-
-  // Recursively traverse the object following the field path
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let value: any = item;
-  for (const key of fields) {
-    if (value === null || value === undefined) {
-      return undefined;
-    }
-    value = value[key];
-  }
-
-  return value || "";
-}
 
 export function Table<T extends { id: string | number }>({
   data,
@@ -89,7 +65,7 @@ export function Table<T extends { id: string | number }>({
                   {column.renderContent
                     ? column.renderContent(item)
                     : column.field !== "actions"
-                    ? getFieldContent(item, column.field as string)
+                    ? getField(item, column.field as string)
                     : null}
                 </td>
               ))}

@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "react-query";
 import { Button } from "../../../components/ui/button";
-import { gql } from "../../../graphql";
 import { useUser } from "../../../hooks/store";
 import { gqlRequest } from "../../../lib/graphql-client";
 import { FormattedTime } from "../../../components/ui/date";
@@ -8,55 +7,13 @@ import { ElapsedTime } from "../../../components/ui/date/elapsed-time";
 import { queryClient } from "../../../lib/react-query";
 import { SessionsSummary } from "./sessions-summary";
 import { Session } from "../../../graphql/graphql";
-
-const USER_SESSIONS = gql(`
-  query UserTodaySessions {
-    todaySessions {
-      id
-      startTime
-      endTime
-      note
-      userId
-    }
-    activeSession {
-      id
-      startTime
-      endTime
-      note
-      userId
-    }
-  }
-`);
-
-const START_SESSION = gql(`
-  mutation StartSession {
-    startSession {
-      id
-      startTime
-      endTime
-      note
-      userId
-    }
-  }
-`);
-
-const END_SESSION = gql(`
-  mutation EndSession {
-    endSession {
-      id
-      startTime
-      endTime
-      note
-      userId
-    }
-  }
-`);
+import { END_SESSION, PANEL_USER_SESSIONS, START_SESSION } from "../sessions_gqls";
 
 const UserSessionPanel = () => {
   const user = useUser();
   const { data, isSuccess } =
     useQuery({
-      queryFn: () => gqlRequest(USER_SESSIONS),
+      queryFn: () => gqlRequest(PANEL_USER_SESSIONS),
       queryKey: ["userTodaySessions"],
     });
 

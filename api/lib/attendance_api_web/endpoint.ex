@@ -1,5 +1,6 @@
 defmodule AttendanceApiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :attendance_api
+  use Absinthe.Phoenix.Endpoint
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -10,6 +11,15 @@ defmodule AttendanceApiWeb.Endpoint do
     signing_salt: "8li7+KLC",
     same_site: "Lax"
   ]
+
+  socket "/api/graphql", AttendanceApiWeb.UserSocket,
+    websocket: true,
+    longpoll: false
+
+  socket "/api/graphql-ws", AttendanceApiWeb.GraphqlWSSocket,
+    websocket: [path: "", subprotocols: ["graphql-transport-ws"]],
+    longpoll: false
+
 
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [session: @session_options]],

@@ -8,9 +8,9 @@ import { z } from "zod";
 import { Button } from "../../../components/ui/button";
 import { Radio, RadioOption } from "../../../components/ui/form/radio";
 import { Select } from "../../../components/ui/form/select";
-import { gql } from "../../../graphql";
 import { gqlRequest } from "../../../lib/graphql-client";
 import { queryClient } from "../../../lib/react-query";
+import { CREATE_ACCOUNT, UPDATE_ACCOUNT } from "../user-gqls";
 
 const userInputSchema = z.object({
   email: z.string().min(8),
@@ -43,32 +43,6 @@ const defaultValues = {
   role: "user",
   isActive: true,
 };
-
-const CREATE_ACCOUNT = gql(`
-  mutation CreateUser($input: AccountInput!) {
-    createAccount(input: $input) {
-      id
-      name
-      email
-      role
-      position
-      isActive
-    }
-  }
-`);
-
-const UPDATE_ACCOUNT = gql(`
-  mutation UpdateAccount($input: AccountInput!, $id: String!) {
-    updateAccount(input: $input, id: $id) {
-      id
-      name
-      email
-      role
-      position
-      isActive
-    }
-  }
-`);
 
 const createUser = (input: UserInput) => {
   return gqlRequest(CREATE_ACCOUNT, { input });
