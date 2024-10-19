@@ -3,6 +3,7 @@ import clsx from "clsx";
 type PaginationProps = {
   total?: number;
   current?: number;
+  perPage?: number;
   disabled?: boolean;
   onPrev: () => void;
   onNext: () => void;
@@ -14,9 +15,9 @@ const disabledClass =
   "pointer-events-none bg-slate-200 border-slate-200 text-slate-500";
 const enabledClass = "text-slate-800 border-slate-300";
 
-const Pagination = ({ total = 0, current = 0, onPrev, onNext, disabled = false }: PaginationProps) => {
+const Pagination = ({ total = 0, current = 0, perPage = 10, onPrev, onNext, disabled = false }: PaginationProps) => {
   const canPrevious = current > 1;
-  const canNext = (current * 10) < total;
+  const canNext = (current * perPage) < total;
 
   return (
     <div className="flex justify-end py-1">
