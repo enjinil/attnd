@@ -221,6 +221,11 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'RootMutationType', login: { __typename?: 'UserToken', token: string, email: string, role: string, position: string, name: string } };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'RootMutationType', logout?: { __typename?: 'LogoutResponse', message?: string | null } | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -332,6 +337,13 @@ export const LoginDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = new TypedDocumentString(`
+    mutation Logout {
+  logout {
+    message
+  }
+}
+    `) as unknown as TypedDocumentString<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = new TypedDocumentString(`
     query Me {
   me {

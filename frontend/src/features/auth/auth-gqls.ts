@@ -12,6 +12,14 @@ export const LOGIN = gql(`
   }
 `);
 
+export const LOGOUT = gql(`
+  mutation Logout {
+    logout {
+      message
+    }
+  }
+`);
+
 export const ME = gql(`
   query Me{
     me {
