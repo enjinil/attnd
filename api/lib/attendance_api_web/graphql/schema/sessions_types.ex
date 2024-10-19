@@ -56,7 +56,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema.SessionsTypes do
       resolve &Resolvers.Sessions.sessions/3
     end
 
-    field :user_total_sessions, :count do
+    field :user_total_sessions, non_null(:count) do
       arg :params, :paginated_sessions_params
       middleware Middleware.Authorize, "user"
       resolve &Resolvers.Sessions.total_sessions/3
@@ -68,10 +68,24 @@ defmodule AttendanceApiWeb.GraphQl.Schema.SessionsTypes do
       resolve &Resolvers.Sessions.user_sessions/3
     end
 
-    field :total_sessions, :count do
+    field :total_sessions, non_null(:count) do
       arg :params, :sessions_params
       middleware Middleware.Authorize, "admin"
       resolve &Resolvers.Sessions.total_user_sessions/3
+    end
+
+    field :sessions_by_user_id, list_of(non_null(:session)) do
+      arg :id, :string
+      arg :params, :paginated_sessions_params
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.Sessions.sessions_by_user_id/3
+    end
+
+    field :total_sessions_by_user_id, non_null(:count) do
+      arg :id, :string
+      arg :params, :paginated_sessions_params
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.Sessions.total_sessions_by_user_id/3
     end
   end
 

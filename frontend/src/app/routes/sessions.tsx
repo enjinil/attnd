@@ -1,15 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { UserSessionPanel } from "../../features/sessions/components/user-session-panel";
 import { UserSessionsTable } from "../../features/sessions/components/user-sessions-table";
-import { SessionsParams } from "../../graphql/graphql";
+import { PaginatedSessionsParams } from "../../graphql/graphql";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
+import { gqlRequest } from "../../lib/graphql-client";
+import { USER_SESSIONS } from "../../features/sessions/sessions_gqls";
+import { useQuery } from "react-query";
 
 const SessionsPage = () => {
-  const [sessionsParams, setSessionsParams] = useState<SessionsParams>({
+  const [params, setSessionsParams] = useState<PaginatedSessionsParams>({
     page: 1,
     startDate: "",
   });
+
+  const { data, isLoading, refetch } = useQuery({
+    queryFn: () => gqlRequest(USER_SESSIONS, { params }),
+    queryKey: ["userSessions"],
+  });
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   return (
     <DashboardLayout>
@@ -21,18 +34,19 @@ const SessionsPage = () => {
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold my-1">Past Sessions</h3>
             <SessionsFilterForm
-              params={sessionsParams}
+              params={params}
               onChange={(changes) =>
-                setSessionsParams({ ...sessionsParams, ...changes })
+                setSessionsParams({ ...params, ...changes })
               }
               allowClear
             />
           </div>
           <UserSessionsTable
-            params={sessionsParams}
+            data={data?.data.userSessions}
             onChange={(changes) =>
-              setSessionsParams({ ...sessionsParams, ...changes })
+              setSessionsParams({ ...params, ...changes })
             }
+            isLoading={isLoading}
           />
         </div>
       </div>

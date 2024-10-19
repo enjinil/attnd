@@ -89,3 +89,22 @@ export const UPDATED_SESSIONS_SUBS = gql(`
     }
   }
 `);
+
+export const SESSSIONS_BY_USER_ID = gql(`
+  query SesssionsByUserId ($id: String!, $params: PaginatedSessionsParams!) {
+    account(id: $id) {
+      id
+      name
+    }
+    sessionsByUserId(id: $id, params: $params) {
+      id
+      startTime
+      endTime
+      note
+      userId
+    }
+    totalSessionsByUserId(id: $id, params: $params) {
+      count
+    }
+  }
+`);

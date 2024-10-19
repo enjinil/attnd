@@ -37,7 +37,7 @@ export type AccountInput = {
 
 export type Count = {
   __typename?: 'Count';
-  count?: Maybe<Scalars['Int']['output']>;
+  count: Scalars['Int']['output'];
 };
 
 export type DeleteSuccessResponse = {
@@ -112,12 +112,14 @@ export type RootQueryType = {
   helloWorld?: Maybe<HelloWorld>;
   me: Account;
   sessions?: Maybe<Array<SessionWithUser>>;
-  totalSessions?: Maybe<Count>;
+  sessionsByUserId?: Maybe<Array<Session>>;
+  totalSessions: Count;
+  totalSessionsByUserId: Count;
   /** Get active user session */
   userActiveSession?: Maybe<Session>;
   userSessions?: Maybe<Array<Session>>;
   userTodaySessions?: Maybe<Array<Maybe<Session>>>;
-  userTotalSessions?: Maybe<Count>;
+  userTotalSessions: Count;
 };
 
 
@@ -136,8 +138,20 @@ export type RootQueryTypeSessionsArgs = {
 };
 
 
+export type RootQueryTypeSessionsByUserIdArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  params?: InputMaybe<PaginatedSessionsParams>;
+};
+
+
 export type RootQueryTypeTotalSessionsArgs = {
   params?: InputMaybe<SessionsParams>;
+};
+
+
+export type RootQueryTypeTotalSessionsByUserIdArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  params?: InputMaybe<PaginatedSessionsParams>;
 };
 
 
@@ -217,14 +231,14 @@ export type UserSessionsQueryVariables = Exact<{
 }>;
 
 
-export type UserSessionsQuery = { __typename?: 'RootQueryType', userSessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, userTotalSessions?: { __typename?: 'Count', count?: number | null } | null };
+export type UserSessionsQuery = { __typename?: 'RootQueryType', userSessions?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, userTotalSessions: { __typename?: 'Count', count: number } };
 
 export type AdminSessionsQueryVariables = Exact<{
   params?: InputMaybe<SessionsParams>;
 }>;
 
 
-export type AdminSessionsQuery = { __typename?: 'RootQueryType', sessions?: Array<{ __typename?: 'SessionWithUser', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string, user: { __typename?: 'SessionUser', id: string, email: string, name: string, position: string } }> | null, totalSessions?: { __typename?: 'Count', count?: number | null } | null };
+export type AdminSessionsQuery = { __typename?: 'RootQueryType', sessions?: Array<{ __typename?: 'SessionWithUser', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string, user: { __typename?: 'SessionUser', id: string, email: string, name: string, position: string } }> | null, totalSessions: { __typename?: 'Count', count: number } };
 
 export type UserTodaySessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -247,6 +261,14 @@ export type UpdatedSessionsSubscriptionSubscriptionVariables = Exact<{
 
 
 export type UpdatedSessionsSubscriptionSubscription = { __typename?: 'RootSubscriptionType', updatedSessions?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, userId: string } | null };
+
+export type SesssionsByUserIdQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+  params: PaginatedSessionsParams;
+}>;
+
+
+export type SesssionsByUserIdQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, name: string }, sessionsByUserId?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessionsByUserId: { __typename?: 'Count', count: number } };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -404,6 +426,24 @@ export const UpdatedSessionsSubscriptionDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UpdatedSessionsSubscriptionSubscription, UpdatedSessionsSubscriptionSubscriptionVariables>;
+export const SesssionsByUserIdDocument = new TypedDocumentString(`
+    query SesssionsByUserId($id: String!, $params: PaginatedSessionsParams!) {
+  account(id: $id) {
+    id
+    name
+  }
+  sessionsByUserId(id: $id, params: $params) {
+    id
+    startTime
+    endTime
+    note
+    userId
+  }
+  totalSessionsByUserId(id: $id, params: $params) {
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<SesssionsByUserIdQuery, SesssionsByUserIdQueryVariables>;
 export const AccountDocument = new TypedDocumentString(`
     query Account($id: String!) {
   account(id: $id) {

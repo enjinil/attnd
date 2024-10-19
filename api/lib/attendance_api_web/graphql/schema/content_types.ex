@@ -27,6 +27,6 @@ defmodule AttendanceApiWeb.GraphQl.Schema.ContentTypes do
   end
 
   object :count do
-    field :count, :integer
+    field :count, non_null(:integer)
   end
 end

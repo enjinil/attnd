@@ -23,7 +23,7 @@ input AccountInput {
 }
 
 type Count {
-  count: Int
+  count: Int!
 }
 
 type DeleteSuccessResponse {
@@ -72,12 +72,14 @@ type RootQueryType {
   helloWorld: HelloWorld
   me: Account!
   sessions(params: SessionsParams): [SessionWithUser!]
-  totalSessions(params: SessionsParams): Count
+  sessionsByUserId(id: String, params: PaginatedSessionsParams): [Session!]
+  totalSessions(params: SessionsParams): Count!
+  totalSessionsByUserId(id: String, params: PaginatedSessionsParams): Count!
   """Get active user session"""
   userActiveSession: Session
   userSessions(params: PaginatedSessionsParams): [Session!]
   userTodaySessions: [Session]
-  userTotalSessions(params: PaginatedSessionsParams): Count
+  userTotalSessions(params: PaginatedSessionsParams): Count!
 }
 
 type RootSubscriptionType {
