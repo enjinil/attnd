@@ -1,23 +1,23 @@
 import { gql } from "../../graphql";
 
 export const USER_SESSIONS = gql(`
-  query UserSessions ($params: SessionsParams) {
-    sessions (params: $params) {
+  query UserSessions ($params: PaginatedSessionsParams) {
+    userSessions (params: $params) {
       id
       startTime
       endTime
       note
       userId
     }
-    totalSessions (params: $params) {
+    userTotalSessions (params: $params) {
       count
     }
   }
 `);
 
 export const ADMIN_USER_SESSIONS = gql(`
-  query AdminUserSessions ($params: UserSessionsParams) {
-    userSessions (params: $params) {
+  query AdminSessions ($params: SessionsParams) {
+    sessions (params: $params) {
       id
       startTime
       endTime
@@ -30,7 +30,7 @@ export const ADMIN_USER_SESSIONS = gql(`
         position
       }
     }
-    totalUserSessions (params: $params) {
+    totalSessions (params: $params) {
       count
     }
   }
@@ -38,14 +38,14 @@ export const ADMIN_USER_SESSIONS = gql(`
 
 export const PANEL_USER_SESSIONS = gql(`
   query UserTodaySessions {
-    todaySessions {
+    userTodaySessions {
       id
       startTime
       endTime
       note
       userId
     }
-    activeSession {
+    userActiveSession {
       id
       startTime
       endTime
@@ -57,7 +57,7 @@ export const PANEL_USER_SESSIONS = gql(`
 
 export const START_SESSION = gql(`
   mutation StartSession {
-    startSession {
+    startUserSession {
       id
       startTime
       endTime
@@ -69,7 +69,7 @@ export const START_SESSION = gql(`
 
 export const END_SESSION = gql(`
   mutation EndSession {
-    endSession {
+    endUserSession {
       id
       startTime
       endTime
@@ -86,6 +86,25 @@ export const UPDATED_SESSIONS_SUBS = gql(`
       startTime
       endTime
       userId
+    }
+  }
+`);
+
+export const SESSSIONS_BY_USER_ID = gql(`
+  query SesssionsByUserId ($id: String!, $params: PaginatedSessionsParams!) {
+    account(id: $id) {
+      id
+      name
+    }
+    sessionsByUserId(id: $id, params: $params) {
+      id
+      startTime
+      endTime
+      note
+      userId
+    }
+    totalSessionsByUserId(id: $id, params: $params) {
+      count
     }
   }
 `);

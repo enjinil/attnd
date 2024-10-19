@@ -23,7 +23,7 @@ input AccountInput {
 }
 
 type Count {
-  count: Int
+  count: Int!
 }
 
 type DeleteSuccessResponse {
@@ -43,19 +43,24 @@ type LogoutResponse {
   message: String
 }
 
+input PaginatedSessionsParams {
+  page: Int!
+  startDate: String!
+}
+
 type RootMutationType {
   """Create new user account"""
   createAccount(input: AccountInput!): Account
   """Delete user account"""
   deleteAccount(input: String!): DeleteSuccessResponse
   """End active user session"""
-  endSession: Session
+  endUserSession: Session
   """Login as user with email and password"""
   login(input: LoginInput!): UserToken!
   """Logout user"""
   logout: LogoutResponse
   """Create user session or return active session"""
-  startSession: Session!
+  startUserSession: Session!
   """Update new user account"""
   updateAccount(id: String!, input: AccountInput!): Account
 }
@@ -63,16 +68,18 @@ type RootMutationType {
 type RootQueryType {
   account(id: String!): Account!
   accounts(query: String): [Account!]
-  """Get active user session"""
-  activeSession: Session
   """Hello world!"""
   helloWorld: HelloWorld
   me: Account!
-  sessions(params: SessionsParams): [Session!]
-  todaySessions: [Session]
-  totalSessions(params: SessionsParams): Count
-  totalUserSessions(params: UserSessionsParams): Count
-  userSessions(params: UserSessionsParams): [SessionWithUser!]
+  sessions(params: SessionsParams): [SessionWithUser!]
+  sessionsByUserId(id: String, params: PaginatedSessionsParams): [Session!]
+  totalSessions(params: SessionsParams): Count!
+  totalSessionsByUserId(id: String, params: PaginatedSessionsParams): Count!
+  """Get active user session"""
+  userActiveSession: Session
+  userSessions(params: PaginatedSessionsParams): [Session!]
+  userTodaySessions: [Session]
+  userTotalSessions(params: PaginatedSessionsParams): Count!
 }
 
 type RootSubscriptionType {
@@ -104,11 +111,6 @@ type SessionWithUser {
 }
 
 input SessionsParams {
-  page: Int!
-  startDate: String!
-}
-
-input UserSessionsParams {
   startDate: String!
 }
 

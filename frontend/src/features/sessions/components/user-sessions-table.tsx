@@ -1,17 +1,17 @@
-import { useQuery } from "react-query";
 import { Table, useTable } from "../../../components/ui/table";
-import { gqlRequest } from "../../../lib/graphql-client";
 import { FormattedTime } from "../../../components/ui/date";
 import { DurationTime } from "../../../components/ui/date/duration-time";
 import { formatDate } from "../../../utils/date";
 import { Pagination } from "../../../components/ui/pagination";
-import { useEffect } from "react";
-import { SessionsParams } from "../../../graphql/graphql";
-import { USER_SESSIONS } from "../sessions_gqls";
+import { PaginatedSessionsParams, Session } from "../../../graphql/graphql";
 
 type UserSessionsTableProps = {
-  params: SessionsParams;
-  onChange: (changes: Partial<SessionsParams>) => void;
+  data?: Session[] | null;
+  page?: number;
+  total?: number;
+  perPage?: number;
+  isLoading?: boolean;
+  onChange: (changes: Partial<PaginatedSessionsParams>) => void;
 };
 
 const formatTime = (dateString?: string | null) => {
@@ -19,21 +19,15 @@ const formatTime = (dateString?: string | null) => {
 };
 
 const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
-  params,
+  data = [],
+  page = 1,
+  total = 0,
+  perPage = 10,
+  isLoading,
   onChange,
 }) => {
-  const { data, isLoading, refetch } = useQuery({
-    queryFn: () => gqlRequest(USER_SESSIONS, { params }),
-    queryKey: ["userSessions"],
-  });
-
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
-
   const sessionsTable = useTable({
-    data: data?.data.sessions || [],
+    data: data || [],
     columns: [
       {
         field: "date",
@@ -77,16 +71,29 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
     ],
   });
 
+  const from = (page - 1) * 10 + 1;
+  const to = Math.min((page - 1) * 10 + 10, total);
+
   return (
     <div>
       <Table className="mb-2" {...sessionsTable.props} />
-      <Pagination
-        total={data?.data.totalSessions?.count || 0}
-        current={params.page as number}
-        onPrev={() => onChange({ page: Number(params.page) - 1 })}
-        onNext={() => onChange({ page: Number(params.page) + 1 })}
-        disabled={isLoading}
-      />
+      <div className="flex items-center justify-between flex-wrap text-slate-800 text-sm">
+        <div>
+          {!!total && (
+            <span>
+              Showing {from}-{to} of {total}
+            </span>
+          )}
+        </div>
+        <Pagination
+          total={total}
+          current={page}
+          onPrev={() => onChange({ page: Number(page) - 1 })}
+          onNext={() => onChange({ page: Number(page) + 1 })}
+          disabled={isLoading}
+          perPage={perPage}
+        />
+      </div>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { isAdminUser } from "../utils/user";
 import UsersEditPage from "./routes/users-edit";
 import useBootstrapUser from "../features/auth/hooks/useBootstrapUser";
 import SessionsPage from "./routes/sessions";
+import UserSessionsPage from "./routes/user-sessions";
 
 const AdminRoute = () => {
   const user = useUser();
@@ -55,6 +56,7 @@ const router = createBrowserRouter(
       <Route path="/users" element={<UsersPage />} />
       <Route path="/users/new" element={<UsersNewPage />} />
       <Route path="/users/:id" element={<UsersEditPage />} />
+      <Route path="/user-sessions/:id" element={<UserSessionsPage />} />
     </Route>,
     <Route element={<NotAuthenticationRoute />}>
       <Route path="/login" element={<LoginPage />} />

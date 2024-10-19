@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { formatDate } from "../../utils/date";
-// import { Pagination } from "../../components/ui/pagination";
-import { AdminUserSessionsTable } from "../../features/sessions/components/admin-user-sessions-table";
+import { AdminDashboardSessionsTable } from "../../features/sessions/components/admin-dashboard-sessions-table";
+import { useQuery } from "react-query";
+import { gqlRequest } from "../../lib/graphql-client";
+import { ADMIN_USER_SESSIONS, UPDATED_SESSIONS_SUBS } from "../../features/sessions/sessions_gqls";
+import { useSubscription } from "../../hooks/useSubscription";
+import { getToken } from "../../lib/auth-provider";
+import { queryClient } from "../../lib/react-query";
 
 const todayDate = formatDate(new Date());
 
@@ -12,50 +17,38 @@ const AdminPage = () => {
     startDate: todayDate,
   });
 
+  const { data, refetch } = useQuery({
+    queryFn: () => gqlRequest(ADMIN_USER_SESSIONS, { params }),
+    queryKey: ["adminUserSessions"],
+  });
+
+  useSubscription(UPDATED_SESSIONS_SUBS, {
+    variables: {
+      token: getToken(),
+    },
+    onReceive() {
+      queryClient.invalidateQueries(["adminUserSessions"]);
+    },
+  });
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
+
   return (
     <DashboardLayout>
-      <div className="flex flex-wrap -mx-4">
-        <div className="w-full lg:w-1/2 px-4 mb-4">
-          <div className="flex justify-between mb-4">
-            <h3 className="font-bold py-1">Sessions</h3>
-            <SessionsFilterForm
-              params={params}
-              onChange={({ startDate }) => setParams({ startDate: startDate })}
-              customText={(query, defaultText) =>
-                query.startDate == todayDate ? "Today" : defaultText
-              }
-            />
-          </div>
-          <AdminUserSessionsTable params={params} />
-        </div>
-        {/* <div className="w-full lg:w-1/2 px-4 mb-4">
-          <h3 className="font-bold py-1 mb-4">Activities</h3>
-          <div className="flex flex-col mb-2">
-            <p className="py-1 px-3 rounded bg-slate-50 text-sm text-slate-600 border border-slate-300 mb-1">
-              <span className="text-black">Test user 2</span> ended a session at
-              17:00.
-            </p>
-            <p className="py-1 px-3 rounded bg-slate-50 text-sm text-slate-600 border border-slate-300 mb-1">
-              <span className="text-black">Test user 3</span> started a session
-              at 08:04.
-            </p>
-            <p className="py-1 px-3 rounded bg-slate-50 text-sm text-slate-600 border border-slate-300 mb-1">
-              <span className="text-black">Test user 2</span> started a session
-              at 08:04.
-            </p>
-            <p className="py-1 px-3 rounded bg-slate-50 text-sm text-slate-600 border border-slate-300 mb-1">
-              <span className="text-black">Test user 1</span> started a session
-              at 08:04.
-            </p>
-          </div>
-          <Pagination
-            total={100}
-            current={1}
-            onPrev={() => null}
-            onNext={() => null}
-          />
-        </div> */}
+      <div className="flex justify-between mb-4">
+        <h3 className="font-bold py-1">Sessions</h3>
+        <SessionsFilterForm
+          params={params}
+          onChange={({ startDate }) => setParams({ startDate: startDate })}
+          customText={(query, defaultText) =>
+            query.startDate == todayDate ? "Today" : defaultText
+          }
+        />
       </div>
+      <AdminDashboardSessionsTable data={data?.data.sessions} />
     </DashboardLayout>
   );
 };
