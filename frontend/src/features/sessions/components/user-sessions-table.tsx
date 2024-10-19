@@ -6,12 +6,12 @@ import { DurationTime } from "../../../components/ui/date/duration-time";
 import { formatDate } from "../../../utils/date";
 import { Pagination } from "../../../components/ui/pagination";
 import { useEffect } from "react";
-import { SessionsParams } from "../../../graphql/graphql";
+import { PaginatedSessionsParams } from "../../../graphql/graphql";
 import { USER_SESSIONS } from "../sessions_gqls";
 
 type UserSessionsTableProps = {
-  params: SessionsParams;
-  onChange: (changes: Partial<SessionsParams>) => void;
+  params: PaginatedSessionsParams;
+  onChange: (changes: Partial<PaginatedSessionsParams>) => void;
 };
 
 const formatTime = (dateString?: string | null) => {
@@ -33,7 +33,7 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
   }, [params]);
 
   const sessionsTable = useTable({
-    data: data?.data.sessions || [],
+    data: data?.data.userSessions || [],
     columns: [
       {
         field: "date",
@@ -81,7 +81,7 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
     <div>
       <Table className="mb-2" {...sessionsTable.props} />
       <Pagination
-        total={data?.data.totalSessions?.count || 0}
+        total={data?.data.userTotalSessions?.count || 0}
         current={params.page as number}
         onPrev={() => onChange({ page: Number(params.page) - 1 })}
         onNext={() => onChange({ page: Number(params.page) + 1 })}

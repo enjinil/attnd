@@ -4,7 +4,7 @@ import { gqlRequest } from "../../../lib/graphql-client";
 import { FormattedTime } from "../../../components/ui/date";
 import { DurationTime } from "../../../components/ui/date/duration-time";
 import { useEffect } from "react";
-import { UserSessionsParams } from "../../../graphql/graphql";
+import { SessionsParams } from "../../../graphql/graphql";
 import { ADMIN_USER_SESSIONS, UPDATED_SESSIONS_SUBS } from "../sessions_gqls";
 import { useSubscription } from "../../../hooks/useSubscription";
 import { getToken } from "../../../lib/auth-provider";
@@ -12,7 +12,7 @@ import { queryClient } from "../../../lib/react-query";
 import { getField } from "../../../utils/object";
 
 type AdminUserSessionsTableProps = {
-  params: UserSessionsParams;
+  params: SessionsParams;
 };
 
 const formatTime = (dateString?: string | null) => {
@@ -42,7 +42,7 @@ const AdminUserSessionsTable: React.FC<AdminUserSessionsTableProps> = ({
   }, [params]);
 
   const sessionsTable = useTable({
-    data: data?.data.userSessions || [],
+    data: data?.data.sessions || [],
     columns: [
       {
         field: "user.name",

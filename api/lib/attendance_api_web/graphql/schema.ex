@@ -1,5 +1,4 @@
 defmodule AttendanceApiWeb.GraphQl.Schema do
-  alias AttendanceApi.Accounts
   alias AttendanceApiWeb.GraphQl.Middleware
   alias AttendanceApi.Accounts.User
   use Absinthe.Schema
@@ -32,40 +31,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       resolve &Resolvers.Users.fetch_user_by_id/3
     end
 
-    field :today_sessions, list_of(:session) do
-      middleware Middleware.Authorize, "user"
-      resolve &Resolvers.Sessions.today_sessions/3
-    end
-
-    @desc "Get active user session"
-    field :active_session, :session do
-      middleware Middleware.Authorize, "user"
-      resolve &Resolvers.Sessions.active_session/3
-    end
-
-    field :sessions, list_of(non_null(:session)) do
-      arg :params, :sessions_params
-      middleware Middleware.Authorize, "user"
-      resolve &Resolvers.Sessions.sessions/3
-    end
-
-    field :total_sessions, :count do
-      arg :params, :sessions_params
-      middleware Middleware.Authorize, "user"
-      resolve &Resolvers.Sessions.total_sessions/3
-    end
-
-    field :user_sessions, list_of(non_null(:session_with_user)) do
-      arg :params, :user_sessions_params
-      middleware Middleware.Authorize, "admin"
-      resolve &Resolvers.Sessions.user_sessions/3
-    end
-
-    field :total_user_sessions, :count do
-      arg :params, :user_sessions_params
-      middleware Middleware.Authorize, "admin"
-      resolve &Resolvers.Sessions.total_user_sessions/3
-    end
+    import_fields :sessions_queries
   end
 
   mutation do
@@ -104,41 +70,11 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
       resolve &Resolvers.Users.delete_account/3
     end
 
-    @desc "Create user session or return active session"
-    field :start_session, non_null(:session) do
-      middleware Middleware.Authorize, "user"
-      resolve &Resolvers.Sessions.start_session/3
-    end
-
-    @desc "End active user session"
-    field :end_session, :session do
-      middleware Middleware.Authorize, "user"
-      resolve &Resolvers.Sessions.end_session/3
-    end
+    import_fields :sessions_mutations
   end
 
   subscription do
-    field :updated_sessions, :session do
-      arg :token, non_null(:string)
-
-      config fn args, _ ->
-        case Accounts.fetch_user_by_api_token(args.token) do
-          {:ok, %{role: "admin"} } ->
-            {:ok, topic: "*"}
-          _ ->
-            {:error, "unauthorized"}
-        end
-      end
-
-      trigger [:start_session, :end_session], topic: fn _ ->
-        ["*"]
-      end
-
-      resolve fn root, _, _ ->
-        IO.inspect(root)
-        {:ok, root}
-      end
-    end
+    import_fields :sessions_subscriptions
   end
 
   def hello_world(_args, %{context: %{current_user: %{email: email}}}), do: {:ok, %{message: "Hello #{email}!"}}

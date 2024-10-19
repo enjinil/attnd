@@ -33,7 +33,7 @@ const UserSessionPanel = () => {
   });
 
   const noActiveSession =
-    isSuccess && data.data.activeSession == null;
+    isSuccess && data.data.userActiveSession == null;
 
   return (
     <>
@@ -59,11 +59,11 @@ const UserSessionPanel = () => {
             <p className="text-lg font-bold mb-6">
               <span>You have been active for </span>
               <ElapsedTime
-                date={data?.data.activeSession?.startTime}
+                date={data?.data.userActiveSession?.startTime}
               />
               <span> from </span>
               <FormattedTime
-                date={data?.data.activeSession?.startTime}
+                date={data?.data.userActiveSession?.startTime}
               />
             </p>
             <Button
@@ -76,7 +76,7 @@ const UserSessionPanel = () => {
           </>
         )}
       </div>
-      {isSuccess && <SessionsSummary sessions={data.data.todaySessions as Session[]} />}
+      {isSuccess && <SessionsSummary sessions={data.data.userTodaySessions as Session[]} />}
     </>
   );
 };
