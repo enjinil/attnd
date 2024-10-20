@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { gqlRequest } from "./graphql-client";
 import { env } from "../config";
-import { LOGIN } from "../features/auth/auth-gqls";
+import { LOGIN, LOGOUT } from "../features/auth/auth-gqls";
 
 const LOCAL_STORAGE_KEY = env.USER_AUTH_LOCAL_STORAGE_KEY || "USER_AUTH";
 
@@ -74,6 +74,8 @@ class AuthAPI {
   }
 
   async logout() {
+    await gqlRequest(LOGOUT);
+
     window.localStorage.removeItem(LOCAL_STORAGE_KEY);
     this.notifyLogoutObservers();
   }
