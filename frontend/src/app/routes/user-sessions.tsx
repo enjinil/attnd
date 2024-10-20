@@ -1,6 +1,6 @@
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SESSSIONS_BY_USER_ID } from "../../features/sessions/sessions_gqls";
 import { gqlRequest } from "../../lib/graphql-client";
 import { PaginatedSessionsParams } from "../../graphql/graphql";
@@ -14,17 +14,11 @@ const UserSessionsPage = () => {
     page: 1,
   });
   const urlParams = useParams();
-
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryFn: () =>
       gqlRequest(SESSSIONS_BY_USER_ID, { id: urlParams.id || "", params }),
-    queryKey: ["adminUserSessions"],
+    queryKey: ["adminUserSessions", urlParams.id, JSON.stringify(params)],
   });
-
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
 
   return (
     <DashboardLayout>

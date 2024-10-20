@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { UserSessionPanel } from "../../features/sessions/components/user-session-panel";
 import { UserSessionsTable } from "../../features/sessions/components/user-sessions-table";
@@ -14,15 +14,10 @@ const SessionsPage = () => {
     startDate: "",
   });
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryFn: () => gqlRequest(USER_SESSIONS, { params }),
-    queryKey: ["userSessions"],
+    queryKey: ["userSessions", JSON.stringify(params)],
   });
-
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
 
   return (
     <DashboardLayout>

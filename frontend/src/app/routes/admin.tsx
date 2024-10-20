@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { formatDate } from "../../utils/date";
@@ -17,9 +17,9 @@ const AdminPage = () => {
     startDate: todayDate,
   });
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryFn: () => gqlRequest(ADMIN_USER_SESSIONS, { params }),
-    queryKey: ["adminUserSessions"],
+    queryKey: ["adminUserSessions", params.startDate],
   });
 
   useSubscription(UPDATED_SESSIONS_SUBS, {
@@ -30,11 +30,6 @@ const AdminPage = () => {
       queryClient.invalidateQueries(["adminUserSessions"]);
     },
   });
-
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
 
   return (
     <DashboardLayout>
