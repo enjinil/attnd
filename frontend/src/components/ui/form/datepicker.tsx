@@ -2,7 +2,7 @@ import { forwardRef, ReactElement } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useController, useFormContext } from "react-hook-form";
-import { formatDate } from "../../../utils/date";
+import { displayDate } from "../../../utils/date";
 
 type DatepickerProps = {
   children?: ReactElement;
@@ -40,7 +40,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
     <div className={className}>
       <DatePicker
         value={field.value}
-        onChange={(dateValue) => field.onChange(formatDate(dateValue))}
+        onChange={(dateValue) => field.onChange(displayDate(dateValue))}
         customInput={children || <DatepickerInput />}
         dateFormat="YYYY/MM/dd"
       />

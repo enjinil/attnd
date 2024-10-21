@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatDatetime } from "../../utils/date";
+import { displayDatetime } from "../../utils/date";
 
 const CurrentTime = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -16,7 +16,7 @@ const CurrentTime = () => {
 
   return (
     <div className="tabular-nums py-2">
-      {formatDatetime(currentTime)}
+      {displayDatetime(currentTime)}
     </div>
   );
 };

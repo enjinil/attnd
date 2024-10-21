@@ -1,4 +1,4 @@
-export const formatDate = (date: Date | string | null | undefined): string => {
+export const displayDate = (date: Date | string | null | undefined): string => {
   if (!date) return "";
 
   const d = new Date(date);
@@ -14,7 +14,7 @@ export const formatDate = (date: Date | string | null | undefined): string => {
   return `${year}/${month}/${day}`;
 };
 
-export const formatDatetime = (date: Date) => {
+export const displayDatetime = (date: Date) => {
   const days = [
     "Sunday",
     "Monday",
