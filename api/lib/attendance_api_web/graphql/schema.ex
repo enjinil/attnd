@@ -8,6 +8,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
   import_types __MODULE__.ContentTypes
   import_types __MODULE__.AccountsTypes
   import_types __MODULE__.SessionsTypes
+  import_types __MODULE__.ReportsTypes
 
   query do
     @desc "Hello world!"
@@ -32,6 +33,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema do
     end
 
     import_fields :sessions_queries
+    import_fields :reports_queries
   end
 
   mutation do

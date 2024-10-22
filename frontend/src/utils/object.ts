@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const getField = <T extends object>(
   item: T | null | undefined,
   field: string

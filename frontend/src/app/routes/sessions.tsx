@@ -7,6 +7,7 @@ import { SessionsFilterForm } from "../../features/sessions/components/sessions-
 import { gqlRequest } from "../../lib/graphql-client";
 import { USER_SESSIONS } from "../../features/sessions/sessions_gqls";
 import { useQuery } from "react-query";
+import { UserSessionsSummary } from "../../features/sessions/components/user-sessions-summary";
 
 const SessionsPage = () => {
   const [params, setSessionsParams] = useState<PaginatedSessionsParams>({
@@ -31,6 +32,7 @@ const SessionsPage = () => {
           <UserSessionPanel />
         </div>
         <div className="w-full lg:w-1/2 mb-6 px-4 text-slate-800">
+          <UserSessionsSummary className="mb-6" />
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold my-1">Past Sessions</h3>
             <SessionsFilterForm
