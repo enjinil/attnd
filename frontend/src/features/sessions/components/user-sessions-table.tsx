@@ -1,7 +1,7 @@
 import { Table, useTable } from "../../../components/ui/table";
 import { FormattedTime } from "../../../components/ui/date";
 import { DurationTime } from "../../../components/ui/date/duration-time";
-import { formatDate } from "../../../utils/date";
+import { displayDate } from "../../../utils/date";
 import { Pagination } from "../../../components/ui/pagination";
 import { PaginatedSessionsParams, Session } from "../../../graphql/graphql";
 
@@ -32,7 +32,7 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
       {
         field: "date",
         title: "Date",
-        renderContent: (item) => formatDate(item.startTime),
+        renderContent: (item) => displayDate(item.startTime),
       },
       {
         field: "startTime",

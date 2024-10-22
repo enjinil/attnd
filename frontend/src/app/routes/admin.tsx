@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
-import { formatDate } from "../../utils/date";
+import { displayDate } from "../../utils/date";
 import { AdminDashboardSessionsTable } from "../../features/sessions/components/admin-dashboard-sessions-table";
 import { useQuery } from "react-query";
 import { gqlRequest } from "../../lib/graphql-client";
@@ -10,7 +10,7 @@ import { useSubscription } from "../../hooks/useSubscription";
 import { getToken } from "../../lib/auth-provider";
 import { queryClient } from "../../lib/react-query";
 
-const todayDate = formatDate(new Date());
+const todayDate = displayDate(new Date());
 
 const AdminPage = () => {
   const [params, setParams] = useState<{ startDate: string }>({

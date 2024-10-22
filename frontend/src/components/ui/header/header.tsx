@@ -9,7 +9,7 @@ const Header = () => {
   const user = useUser();
 
   return (
-    <header className="container mx-auto px-4 bg-slate-50 w-full rounded-b-md border border-slate-300">
+    <header className="container mx-auto px-4 bg-slate-50 w-full rounded-b-md border border-slate-300 shadow-sm">
       <div className="flex flex-wrap text-sm items-center justify-between">
         <div className="flex items-center py-2">
           <Logo className="mr-6" />

@@ -108,3 +108,14 @@ export const SESSSIONS_BY_USER_ID = gql(`
     }
   }
 `);
+
+export const WORK_HOURS_REPORT = gql(`
+  query WorkHoursReport($userId: String, $startDate: String!, $endDate: String!) {
+    workHoursReport(userId: $userId, startDate: $startDate, endDate: $endDate) {
+      userId
+      workDate
+      totalHours
+      sessionsPerDay
+    }
+  }
+`);

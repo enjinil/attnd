@@ -1,16 +1,16 @@
 import { forwardRef, ReactElement } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useController, useFormContext } from "react-hook-form";
-import { displayDate } from "../../../utils/date";
+import { displayMonth } from "../../../utils/date";
+import DatePicker from "react-datepicker";
 
-type DatepickerProps = {
+type MonthpickerProps = {
   children?: ReactElement;
   className?: string;
   name: string;
 };
 
-const DatepickerInput = forwardRef<HTMLInputElement>((props, ref) => {
+const MonthpickerInput = forwardRef<HTMLInputElement>((props, ref) => {
   return (
     <input
       className={
@@ -24,7 +24,7 @@ const DatepickerInput = forwardRef<HTMLInputElement>((props, ref) => {
   );
 });
 
-const Datepicker: React.FC<DatepickerProps> = ({
+const Monthpicker: React.FC<MonthpickerProps> = ({
   name,
   children,
   className,
@@ -40,12 +40,14 @@ const Datepicker: React.FC<DatepickerProps> = ({
     <div className={className}>
       <DatePicker
         value={field.value}
-        onChange={(dateValue) => field.onChange(displayDate(dateValue))}
-        customInput={children || <DatepickerInput />}
-        dateFormat="YYYY/MM/dd"
+        onChange={(dateValue) => field.onChange(displayMonth(dateValue))}
+        customInput={children || <MonthpickerInput />}
+        dateFormat="YYYY/MM"
+        showMonthYearPicker
+        showFullMonthYearPicker
       />
     </div>
   );
 };
 
-export { Datepicker };
+export { Monthpicker };

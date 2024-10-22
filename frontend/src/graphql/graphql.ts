@@ -120,6 +120,7 @@ export type RootQueryType = {
   userSessions?: Maybe<Array<Session>>;
   userTodaySessions?: Maybe<Array<Maybe<Session>>>;
   userTotalSessions: Count;
+  workHoursReport: Array<Maybe<WorkHoursSummary>>;
 };
 
 
@@ -162,6 +163,13 @@ export type RootQueryTypeUserSessionsArgs = {
 
 export type RootQueryTypeUserTotalSessionsArgs = {
   params?: InputMaybe<PaginatedSessionsParams>;
+};
+
+
+export type RootQueryTypeWorkHoursReportArgs = {
+  endDate: Scalars['String']['input'];
+  startDate: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RootSubscriptionType = {
@@ -212,6 +220,14 @@ export type UserToken = {
   position: Scalars['String']['output'];
   role: Scalars['String']['output'];
   token: Scalars['String']['output'];
+};
+
+export type WorkHoursSummary = {
+  __typename?: 'WorkHoursSummary';
+  sessionsPerDay: Scalars['Int']['output'];
+  totalHours: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+  workDate: Scalars['String']['output'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -274,6 +290,15 @@ export type SesssionsByUserIdQueryVariables = Exact<{
 
 
 export type SesssionsByUserIdQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, name: string }, sessionsByUserId?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessionsByUserId: { __typename?: 'Count', count: number } };
+
+export type WorkHoursReportQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+  startDate: Scalars['String']['input'];
+  endDate: Scalars['String']['input'];
+}>;
+
+
+export type WorkHoursReportQuery = { __typename?: 'RootQueryType', workHoursReport: Array<{ __typename?: 'WorkHoursSummary', userId: string, workDate: string, totalHours: string, sessionsPerDay: number } | null> };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -456,6 +481,16 @@ export const SesssionsByUserIdDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<SesssionsByUserIdQuery, SesssionsByUserIdQueryVariables>;
+export const WorkHoursReportDocument = new TypedDocumentString(`
+    query WorkHoursReport($userId: String, $startDate: String!, $endDate: String!) {
+  workHoursReport(userId: $userId, startDate: $startDate, endDate: $endDate) {
+    userId
+    workDate
+    totalHours
+    sessionsPerDay
+  }
+}
+    `) as unknown as TypedDocumentString<WorkHoursReportQuery, WorkHoursReportQueryVariables>;
 export const AccountDocument = new TypedDocumentString(`
     query Account($id: String!) {
   account(id: $id) {
