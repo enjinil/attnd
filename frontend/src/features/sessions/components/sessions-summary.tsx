@@ -33,7 +33,7 @@ const SessionsSummary = ({ sessions }: SessionsSummaryProps) => {
           <SessionsTotalDuration sessions={sessions} />
         </div>
       </div>
-      <div className="px-4 py-3 border border-slate-300 bg-slate-50 rounded">
+      <div className="px-4 py-3 border border-slate-300 bg-slate-50 rounded shadow-sm">
         <div className="relative space-y-1">
           {sessions.map((session) => (
             <div key={session.id}>

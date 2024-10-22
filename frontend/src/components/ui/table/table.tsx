@@ -28,7 +28,7 @@ export function Table<T extends { id: string | number }>({
   return (
     <div
       className={clsx(
-        "border border-slate-300 bg-slate-50 rounded pt-2 overflow-x-auto",
+        "border border-slate-300 bg-slate-50 rounded pt-2 overflow-x-auto shadow-sm",
         className
       )}
     >
