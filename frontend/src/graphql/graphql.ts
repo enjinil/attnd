@@ -94,6 +94,11 @@ export type RootMutationTypeDeleteAccountArgs = {
 };
 
 
+export type RootMutationTypeEndUserSessionArgs = {
+  note?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type RootMutationTypeLoginArgs = {
   input: LoginInput;
 };
@@ -271,7 +276,9 @@ export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type StartSessionMutation = { __typename?: 'RootMutationType', startUserSession: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } };
 
-export type EndSessionMutationVariables = Exact<{ [key: string]: never; }>;
+export type EndSessionMutationVariables = Exact<{
+  note: Scalars['String']['input'];
+}>;
 
 
 export type EndSessionMutation = { __typename?: 'RootMutationType', endUserSession?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string } | null };
@@ -443,8 +450,8 @@ export const StartSessionDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<StartSessionMutation, StartSessionMutationVariables>;
 export const EndSessionDocument = new TypedDocumentString(`
-    mutation EndSession {
-  endUserSession {
+    mutation EndSession($note: String!) {
+  endUserSession(note: $note) {
     id
     startTime
     endTime

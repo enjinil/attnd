@@ -68,8 +68,8 @@ export const START_SESSION = gql(`
 `);
 
 export const END_SESSION = gql(`
-  mutation EndSession {
-    endUserSession {
+  mutation EndSession($note: String!) {
+    endUserSession(note: $note) {
       id
       startTime
       endTime

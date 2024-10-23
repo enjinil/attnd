@@ -54,7 +54,7 @@ type RootMutationType {
   """Delete user account"""
   deleteAccount(input: String!): DeleteSuccessResponse
   """End active user session"""
-  endUserSession: Session
+  endUserSession(note: String): Session
   """Login as user with email and password"""
   login(input: LoginInput!): UserToken!
   """Logout user"""

@@ -21,7 +21,7 @@ const documents = {
     "\n  query AdminSessions ($params: SessionsParams) {\n    sessions (params: $params) {\n      id\n      startTime\n      endTime\n      note\n      userId\n      user {\n        id\n        email\n        name\n        position\n      }\n    }\n    totalSessions (params: $params) {\n      count\n    }\n  }\n": types.AdminSessionsDocument,
     "\n  query UserTodaySessions {\n    userTodaySessions {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n    userActiveSession {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n": types.UserTodaySessionsDocument,
     "\n  mutation StartSession {\n    startUserSession {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n": types.StartSessionDocument,
-    "\n  mutation EndSession {\n    endUserSession {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n": types.EndSessionDocument,
+    "\n  mutation EndSession($note: String!) {\n    endUserSession(note: $note) {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n": types.EndSessionDocument,
     "\n  subscription UpdatedSessionsSubscription ($token: String!) {\n    updatedSessions(token: $token) {\n      id\n      startTime\n      endTime\n      userId\n    }\n  }\n": types.UpdatedSessionsSubscriptionDocument,
     "\n  query SesssionsByUserId ($id: String!, $params: PaginatedSessionsParams!) {\n    account(id: $id) {\n      id\n      name\n    }\n    sessionsByUserId(id: $id, params: $params) {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n    totalSessionsByUserId(id: $id, params: $params) {\n      count\n    }\n  }\n": types.SesssionsByUserIdDocument,
     "\n  query WorkHoursReport($userId: String, $startDate: String!, $endDate: String!) {\n    workHoursReport(userId: $userId, startDate: $startDate, endDate: $endDate) {\n      userId\n      workDate\n      totalHours\n      sessionsPerDay\n    }\n  }\n": types.WorkHoursReportDocument,
@@ -63,7 +63,7 @@ export function gql(source: "\n  mutation StartSession {\n    startUserSession {
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation EndSession {\n    endUserSession {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n"): typeof import('./graphql').EndSessionDocument;
+export function gql(source: "\n  mutation EndSession($note: String!) {\n    endUserSession(note: $note) {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n"): typeof import('./graphql').EndSessionDocument;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
