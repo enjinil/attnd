@@ -98,6 +98,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema.SessionsTypes do
 
     @desc "End active user session"
     field :end_user_session, :session do
+      arg :note, :string
       middleware Middleware.Authorize, "user"
       resolve &Resolvers.Sessions.end_session/3
     end

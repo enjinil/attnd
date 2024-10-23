@@ -26,11 +26,11 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
     end
   end
 
-  def end_session(_, _, resolution) do
+  def end_session(_, args, resolution) do
     with %{current_user: current_user} <- resolution.context do
       case active_session_by_user(current_user.id) do
         nil -> {:ok, nil}
-        session -> session |> IO.inspect() |> Session.end_changeset(%{note: ""}) |> Repo.update()
+        session -> session |> Session.end_changeset(%{note: args.note}) |> Repo.update()
       end
     else
       _ -> {:error, "Unauthorized!"}
