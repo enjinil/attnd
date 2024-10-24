@@ -1,4 +1,5 @@
 defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
+  alias AttendanceApiWeb.Helpers
   alias AttendanceApi.Repo
   alias AttendanceApi.Attendance.Session
 
@@ -163,45 +164,21 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
     date_string = get_params_field(params, :start_date)
 
     if date_string not in [nil, ""] do
-      query |> Session.where_start_date(parse_date(date_string))
+      query |> Session.where_start_date(Helpers.parse_date(date_string))
     else
       query
     end
   end
 
-  @doc """
-  Safely get fields from nested params map.
-  """
   defp get_params_field(params, field, default \\ "") do
     params
     |> Map.get(:params, %{})
     |> Map.get(field, default)
   end
 
-  @doc """
-  Retrieve active session for a user.
-  """
   defp active_session_by_user(user_id) do
     Session.for_user_sessions(user_id)
     |> Session.where_is_active()
     |> Repo.one()
-  end
-
-  @doc """
-  Parse date string into Date struct.
-
-  ## Arguments
-  - `date_string`: ISO 8601 formatted date string (YYYY-MM-DD or YYYY/MM/DD)
-
-  ## Returns
-  - `Date` struct
-
-  ## Raises
-  - `Date.ParseError` if the date string is invalid
-  """
-  defp parse_date(date_string) do
-    date_string
-    |> String.replace("/", "-") # In case "/" is used as separator
-    |> Date.from_iso8601!()
   end
 end
