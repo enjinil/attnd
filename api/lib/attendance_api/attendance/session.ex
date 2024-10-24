@@ -48,6 +48,26 @@ defmodule AttendanceApi.Attendance.Session do
     |> where([s], s.user_id == ^user_id)
   end
 
+  def for_daily_work_hours(user_id, start_date, end_date) do
+    from(s in __MODULE__,
+      where: fragment("DATE(?)", s.start_time) >= ^start_date,
+      where: fragment("DATE(?)", s.start_time) <= ^end_date,
+      where: s.user_id == ^user_id,
+      group_by: [s.user_id, fragment("DATE(?)", s.start_time)],
+      select: %{
+        user_id: s.user_id,
+        work_date: fragment("DATE(?)", s.start_time),
+        sessions_per_day: count(s.id),
+        total_hours: fragment(
+          "ROUND(CAST(SUM(EXTRACT(EPOCH FROM (? - ?)))/3600 as numeric), 2)",
+          s.end_time,
+          s.start_time
+        )
+      },
+      order_by: [s.user_id, fragment("DATE(?)", s.start_time)]
+    )
+  end
+
   def where_is_ended(query) do
     where(query, [s], not is_nil(s.end_time))
   end
@@ -59,6 +79,7 @@ defmodule AttendanceApi.Attendance.Session do
   def where_start_date(query, start_date) do
     where(query, [s], fragment("?::date", s.start_time) == ^start_date)
   end
+
 
   defp datetime_now() do
     DateTime.utc_now() |> DateTime.truncate(:second)
