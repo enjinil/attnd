@@ -40,9 +40,9 @@ const SessionsPage = () => {
           </div>
           <UserSessionsTable
             data={data?.data.userSessions}
-            onChange={(changes) =>
-              setSessionsParams({ ...params, ...changes })
-            }
+            total={data?.data.userTotalSessions.count}
+            page={params.page}
+            onChange={(changes) => setSessionsParams({ ...params, ...changes })}
             isLoading={isLoading}
           />
         </div>
