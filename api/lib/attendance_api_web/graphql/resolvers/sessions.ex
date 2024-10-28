@@ -9,27 +9,23 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
   Starts a new session for the current user.
   Returns the existing active session if one exists, otherwise creates a new session.
   """
-  def start_user_session(_, _, resolution) do
-    with %{current_user: current_user} <- resolution.context do
-      case active_session_by_user(current_user.id) do
+  def start_user_session(_, args, resolution) do
+    with {:ok, user_id} <- Helpers.authorize_and_get_user_id(resolution.context, args) do
+      case active_session_by_user(user_id) do
         nil -> %Session{}
-        |> Session.start_changeset(%{ user_id: current_user.id })
+        |> Session.start_changeset(%{ user_id: user_id })
         |> Repo.insert()
         session -> {:ok, session}
       end
-    else
-      _ -> {:error, "Unauthorized!"}
     end
   end
 
   @doc """
   Retrieves the current user's active session if one exists.
   """
-  def user_active_session(_, _, resolution) do
-    with %{current_user: current_user} <- resolution.context do
-      {:ok, active_session_by_user(current_user.id)}
-    else
-      _ -> {:error, "Unauthorized!"}
+  def user_active_session(_, args, resolution) do
+    with {:ok, user_id} <- Helpers.authorize_and_get_user_id(resolution.context, args) do
+      {:ok, active_session_by_user(user_id)}
     end
   end
 
@@ -40,27 +36,23 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
   - `args`: Map containing `:note` field for session end note
   """
   def end_user_session(_, args, resolution) do
-    with %{current_user: current_user} <- resolution.context do
-      case active_session_by_user(current_user.id) do
+    with {:ok, user_id} <- Helpers.authorize_and_get_user_id(resolution.context, args) do
+      case active_session_by_user(user_id) do
         nil -> {:ok, nil}
         session -> session |> Session.end_changeset(%{note: args.note}) |> Repo.update()
       end
-    else
-      _ -> {:error, "Unauthorized!"}
     end
   end
 
   @doc """
   Retrieves all sessions for the current user that started today.
   """
-  def user_today_sessions(_, _, resolution) do
-    with %{current_user: current_user} <- resolution.context do
-      query = Session.for_user_sessions(current_user.id)
+  def user_today_sessions(_, args, resolution) do
+    with {:ok, user_id} <- Helpers.authorize_and_get_user_id(resolution.context, args) do
+      query = Session.for_user_sessions(user_id)
         |> Session.where_start_date(Date.utc_today())
 
-        {:ok, Repo.all(query)}
-    else
-      _ -> {:error, "Unauthorized!"}
+      {:ok, Repo.all(query)}
     end
   end
 
@@ -68,11 +60,11 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
   Retrieves paginated ended sessions for the current user.
   """
   def user_sessions(_, args, resolution) do
-    with %{current_user: current_user} <- resolution.context do
+    with {:ok, user_id} <- Helpers.authorize_and_get_user_id(resolution.context, args) do
       page = get_params_field(args, :page, 1)
       offset = (page - 1) * 10
 
-      query = Session.for_user_sessions(current_user.id)
+      query = Session.for_user_sessions(user_id)
       |> Session.where_is_ended()
       |> order_by([s], desc: s.id)
       |> limit(10)
@@ -80,8 +72,6 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
       |> maybe_filter_by_start_date(args)
 
       {:ok, Repo.all(query)}
-    else
-      _ -> {:error, "Unauthorized!"}
     end
   end
 
@@ -89,15 +79,13 @@ defmodule AttendanceApiWeb.Graphql.Resolvers.Sessions do
   Counts total number of ended sessions for the current user.
   """
   def user_total_sessions(_, args, resolution) do
-    with %{current_user: current_user} <- resolution.context do
-      count = Session.for_user_sessions_count(current_user.id)
+    with {:ok, user_id} <- Helpers.authorize_and_get_user_id(resolution.context, args) do
+      count = Session.for_user_sessions_count(user_id)
       |> Session.where_is_ended()
       |> maybe_filter_by_start_date(args)
       |> Repo.one()
 
       {:ok, %{count: count}}
-    else
-      _ -> {:error, "Unauthorized!"}
     end
   end
 
