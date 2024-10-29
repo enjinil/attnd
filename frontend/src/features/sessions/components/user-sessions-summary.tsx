@@ -1,40 +1,24 @@
-import { useState } from "react";
-import { SummaryFilterForm } from "./summary-filter-form";
+import { SummaryFilterForm, SummaryFilterFormProps } from "./summary-filter-form";
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
 
 import clsx from "clsx";
-import { useQuery } from "react-query";
-import { gqlRequest } from "../../../lib/graphql-client";
-import { WORK_HOURS_REPORT } from "../sessions_gqls";
-import {
-  formatDate,
-  monthBoundaryDates,
-  parseMonth,
-} from "../../../utils/date";
 
-type UserSessionsSummaryProps = {
+interface UserSessionsSummaryProps extends SummaryFilterFormProps  {
   className?: string;
+  total: number;
+  data: Array<{
+    workDate: string;
+    totalHours: string;
+  }>
 };
 
 const UserSessionsSummary: React.FC<UserSessionsSummaryProps> = ({
   className,
+  params,
+  onChange,
+  total,
+  data
 }) => {
-  const [params, setParams] = useState({ month: "2024/10" });
-  const [startDate, endDate] = monthBoundaryDates(parseMonth(params.month));
-
-  const { isLoading, data } = useQuery({
-    queryFn: () =>
-      gqlRequest(WORK_HOURS_REPORT, {
-        startDate: formatDate(startDate),
-        endDate: formatDate(endDate),
-      }),
-    queryKey: ["work-hours-report", JSON.stringify(params)],
-  });
-
-  const total = isLoading
-    ? "-"
-    : data?.data.workHoursReport.reduce((t, x) => t + Number(x?.totalHours), 0);
-
   return (
     <div className={clsx(className)}>
       <div className="flex items-center justify-between mb-3">
@@ -43,7 +27,7 @@ const UserSessionsSummary: React.FC<UserSessionsSummaryProps> = ({
         </h3>
         <SummaryFilterForm
           params={params}
-          onChange={(changes) => setParams(changes)}
+          onChange={onChange}
         />
       </div>
       <div className="h-[160px]">
@@ -51,7 +35,7 @@ const UserSessionsSummary: React.FC<UserSessionsSummaryProps> = ({
           <BarChart
             width={150}
             height={40}
-            data={data?.data.workHoursReport || []}
+            data={data || []}
           >
             <Bar
               maxBarSize={20}

@@ -125,7 +125,7 @@ export type RootQueryType = {
   userSessions?: Maybe<Array<Session>>;
   userTodaySessions?: Maybe<Array<Maybe<Session>>>;
   userTotalSessions: Count;
-  workHoursReport: Array<Maybe<WorkHoursSummary>>;
+  workHoursReport: Array<WorkHoursSummary>;
 };
 
 
@@ -290,13 +290,20 @@ export type UpdatedSessionsSubscriptionSubscriptionVariables = Exact<{
 
 export type UpdatedSessionsSubscriptionSubscription = { __typename?: 'RootSubscriptionType', updatedSessions?: { __typename?: 'Session', id: string, startTime: string, endTime?: string | null, userId: string } | null };
 
+export type AccountByIdQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type AccountByIdQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, name: string } };
+
 export type SesssionsByUserIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
   params: PaginatedSessionsParams;
 }>;
 
 
-export type SesssionsByUserIdQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, name: string }, sessionsByUserId?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessionsByUserId: { __typename?: 'Count', count: number } };
+export type SesssionsByUserIdQuery = { __typename?: 'RootQueryType', sessionsByUserId?: Array<{ __typename?: 'Session', id: string, startTime: string, endTime?: string | null, note?: string | null, userId: string }> | null, totalSessionsByUserId: { __typename?: 'Count', count: number } };
 
 export type WorkHoursReportQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
@@ -305,7 +312,7 @@ export type WorkHoursReportQueryVariables = Exact<{
 }>;
 
 
-export type WorkHoursReportQuery = { __typename?: 'RootQueryType', workHoursReport: Array<{ __typename?: 'WorkHoursSummary', userId: string, workDate: string, totalHours: string, sessionsPerDay: number } | null> };
+export type WorkHoursReportQuery = { __typename?: 'RootQueryType', workHoursReport: Array<{ __typename?: 'WorkHoursSummary', userId: string, workDate: string, totalHours: string, sessionsPerDay: number }> };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -470,12 +477,16 @@ export const UpdatedSessionsSubscriptionDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UpdatedSessionsSubscriptionSubscription, UpdatedSessionsSubscriptionSubscriptionVariables>;
-export const SesssionsByUserIdDocument = new TypedDocumentString(`
-    query SesssionsByUserId($id: String!, $params: PaginatedSessionsParams!) {
+export const AccountByIdDocument = new TypedDocumentString(`
+    query AccountById($id: String!) {
   account(id: $id) {
     id
     name
   }
+}
+    `) as unknown as TypedDocumentString<AccountByIdQuery, AccountByIdQueryVariables>;
+export const SesssionsByUserIdDocument = new TypedDocumentString(`
+    query SesssionsByUserId($id: String!, $params: PaginatedSessionsParams!) {
   sessionsByUserId(id: $id, params: $params) {
     id
     startTime

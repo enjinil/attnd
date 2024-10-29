@@ -16,7 +16,7 @@ const Header = () => {
           <HeaderMenu />
         </div>
         <div></div>
-        <div className="flex flex-wrap lg:space-x-4 items-center text-slate-700">
+        <div className="flex flex-wrap md:space-x-4 items-center text-slate-700">
           {!!user && <LogoutButton />}
           {isAdminUser(user) ? null : <CurrentTime />}
         </div>

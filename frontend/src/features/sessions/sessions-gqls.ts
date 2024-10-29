@@ -90,12 +90,17 @@ export const UPDATED_SESSIONS_SUBS = gql(`
   }
 `);
 
-export const SESSSIONS_BY_USER_ID = gql(`
-  query SesssionsByUserId ($id: String!, $params: PaginatedSessionsParams!) {
+export const ACCOUNT_BY_ID = gql(`
+  query AccountById ($id: String!) {
     account(id: $id) {
       id
       name
     }
+  }
+`);
+
+export const SESSSIONS_BY_USER_ID = gql(`
+  query SesssionsByUserId ($id: String!, $params: PaginatedSessionsParams!) {
     sessionsByUserId(id: $id, params: $params) {
       id
       startTime

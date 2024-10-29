@@ -80,7 +80,7 @@ type RootQueryType {
   userSessions(params: PaginatedSessionsParams): [Session!]
   userTodaySessions: [Session]
   userTotalSessions(params: PaginatedSessionsParams): Count!
-  workHoursReport(endDate: String!, startDate: String!, userId: String): [WorkHoursSummary]!
+  workHoursReport(endDate: String!, startDate: String!, userId: String): [WorkHoursSummary!]!
 }
 
 type RootSubscriptionType {
