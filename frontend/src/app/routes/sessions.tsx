@@ -49,12 +49,6 @@ const SessionsPage = () => {
     queryKey: ["work-hours-report", summaryParams],
   });
 
-  const summaryTotal =
-    summaryData?.data.workHoursReport.reduce(
-      (t, x) => t + Number(x?.totalHours),
-      0
-    ) || 0;
-
   return (
     <DashboardLayout>
       <div className="flex flex-wrap -mx-4">
@@ -64,7 +58,6 @@ const SessionsPage = () => {
         <div className="w-full lg:w-1/2 mb-6 px-4 text-slate-800">
           <UserSessionsSummary
             data={summaryData?.data.workHoursReport || []}
-            total={summaryTotal}
             params={summaryParams}
             onChange={(changes) => setSummaryParams({ ...changes })}
             className="mb-6"
