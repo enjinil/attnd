@@ -11,7 +11,7 @@ import {
   END_SESSION,
   PANEL_USER_SESSIONS,
   START_SESSION,
-} from "../sessions_gqls";
+} from "../sessions-gqls";
 import { usePrompt } from "../../../hooks/usePrompt";
 
 const UserSessionPanel = () => {

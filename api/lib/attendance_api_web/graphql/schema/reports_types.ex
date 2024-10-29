@@ -11,7 +11,7 @@ defmodule AttendanceApiWeb.GraphQl.Schema.ReportsTypes do
   end
 
   object :reports_queries do
-    field :work_hours_report, non_null(list_of(:work_hours_summary)) do
+    field :work_hours_report, non_null(list_of(non_null(:work_hours_summary))) do
       arg :user_id, :string
       arg :start_date, non_null(:string)
       arg :end_date, non_null(:string)

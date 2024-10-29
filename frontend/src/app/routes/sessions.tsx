@@ -5,20 +5,54 @@ import { UserSessionsTable } from "../../features/sessions/components/user-sessi
 import { PaginatedSessionsParams } from "../../graphql/graphql";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { gqlRequest } from "../../lib/graphql-client";
-import { USER_SESSIONS } from "../../features/sessions/sessions_gqls";
+import {
+  USER_SESSIONS,
+  WORK_HOURS_REPORT,
+} from "../../features/sessions/sessions-gqls";
 import { useQuery } from "react-query";
 import { UserSessionsSummary } from "../../features/sessions/components/user-sessions-summary";
+import {
+  displayMonth,
+  formatDate,
+  monthBoundaryDates,
+  parseMonth,
+} from "../../utils/date";
 
 const SessionsPage = () => {
-  const [params, setSessionsParams] = useState<PaginatedSessionsParams>({
-    page: 1,
-    startDate: "",
+  const [sessionsParams, setSessionsParams] = useState<PaginatedSessionsParams>(
+    {
+      page: 1,
+      startDate: "",
+    }
+  );
+
+  const { data: sessionsData, isLoading: isSessionsLoading } = useQuery({
+    queryFn: () => gqlRequest(USER_SESSIONS, { params: sessionsParams }),
+    queryKey: ["userSessions", JSON.stringify(sessionsParams)],
   });
 
-  const { data, isLoading } = useQuery({
-    queryFn: () => gqlRequest(USER_SESSIONS, { params }),
-    queryKey: ["userSessions", JSON.stringify(params)],
+  const today = new Date();
+  const [summaryParams, setSummaryParams] = useState({
+    month: displayMonth(today),
   });
+  const [startDate, endDate] = monthBoundaryDates(
+    parseMonth(summaryParams.month)
+  );
+
+  const { data: summaryData } = useQuery({
+    queryFn: () =>
+      gqlRequest(WORK_HOURS_REPORT, {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      }),
+    queryKey: ["work-hours-report", JSON.stringify(summaryParams)],
+  });
+
+  const summaryTotal =
+    summaryData?.data.workHoursReport.reduce(
+      (t, x) => t + Number(x?.totalHours),
+      0
+    ) || 0;
 
   return (
     <DashboardLayout>
@@ -27,23 +61,29 @@ const SessionsPage = () => {
           <UserSessionPanel />
         </div>
         <div className="w-full lg:w-1/2 mb-6 px-4 text-slate-800">
-          <UserSessionsSummary className="mb-6" />
+          <UserSessionsSummary
+            data={summaryData?.data.workHoursReport || []}
+            total={summaryTotal}
+            params={summaryParams}
+            onChange={(changes) => setSummaryParams({ ...changes })}
+            className="mb-6"
+          />
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold my-1">Past Sessions</h3>
             <SessionsFilterForm
-              params={params}
+              params={sessionsParams}
               onChange={(changes) =>
-                setSessionsParams({ ...params, ...changes })
+                setSessionsParams({ ...sessionsParams, ...changes })
               }
               allowClear
             />
           </div>
           <UserSessionsTable
-            data={data?.data.userSessions}
+            data={sessionsData?.data.userSessions}
             onChange={(changes) =>
-              setSessionsParams({ ...params, ...changes })
+              setSessionsParams({ ...sessionsParams, ...changes })
             }
-            isLoading={isLoading}
+            isLoading={isSessionsLoading}
           />
         </div>
       </div>

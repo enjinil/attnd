@@ -5,7 +5,7 @@ import { displayDate } from "../../utils/date";
 import { AdminDashboardSessionsTable } from "../../features/sessions/components/admin-dashboard-sessions-table";
 import { useQuery } from "react-query";
 import { gqlRequest } from "../../lib/graphql-client";
-import { ADMIN_USER_SESSIONS, UPDATED_SESSIONS_SUBS } from "../../features/sessions/sessions_gqls";
+import { ADMIN_USER_SESSIONS, UPDATED_SESSIONS_SUBS } from "../../features/sessions/sessions-gqls";
 import { useSubscription } from "../../hooks/useSubscription";
 import { getToken } from "../../lib/auth-provider";
 import { queryClient } from "../../lib/react-query";
