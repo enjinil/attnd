@@ -58,12 +58,6 @@ const UserSessionsPage = () => {
     keepPreviousData: true,
   });
 
-  const summaryTotal =
-    summaryData?.data.workHoursReport.reduce(
-      (t, x) => t + Number(x?.totalHours),
-      0
-    ) || 0;
-
   return (
     <DashboardLayout>
       <div className="flex justify-between mb-4">
@@ -76,7 +70,6 @@ const UserSessionsPage = () => {
       <div className="mb-6">
         <UserSessionsSummary
           data={summaryData?.data.workHoursReport || []}
-          total={summaryTotal}
           params={summaryParams}
           onChange={(changes) => setSummaryParams({ ...changes })}
           className="mb-6"
