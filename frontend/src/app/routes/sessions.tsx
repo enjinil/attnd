@@ -5,7 +5,10 @@ import { UserSessionsTable } from "../../features/sessions/components/user-sessi
 import { PaginatedSessionsParams } from "../../graphql/graphql";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { gqlRequest } from "../../lib/graphql-client";
-import { USER_SESSIONS } from "../../features/sessions/sessions_gqls";
+import {
+  USER_SESSIONS,
+  WORK_HOURS_REPORT,
+} from "../../features/sessions/sessions-gqls";
 import { useQuery } from "react-query";
 import { UserSessionsSummary } from "../../features/sessions/components/user-sessions-summary";
 

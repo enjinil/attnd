@@ -1,7 +1,11 @@
 import DashboardLayout from "../../components/ui/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { useState } from "react";
-import { SESSSIONS_BY_USER_ID } from "../../features/sessions/sessions_gqls";
+import {
+  ACCOUNT_BY_ID,
+  SESSSIONS_BY_USER_ID,
+  WORK_HOURS_REPORT,
+} from "../../features/sessions/sessions-gqls";
 import { gqlRequest } from "../../lib/graphql-client";
 import { PaginatedSessionsParams } from "../../graphql/graphql";
 import { useParams } from "react-router-dom";
