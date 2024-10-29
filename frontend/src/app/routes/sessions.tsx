@@ -28,7 +28,8 @@ const SessionsPage = () => {
 
   const { data: sessionsData, isLoading: isSessionsLoading } = useQuery({
     queryFn: () => gqlRequest(USER_SESSIONS, { params: sessionsParams }),
-    queryKey: ["userSessions", JSON.stringify(sessionsParams)],
+    queryKey: ["userSessions", sessionsParams],
+    keepPreviousData: true,
   });
 
   const today = new Date();
@@ -45,7 +46,7 @@ const SessionsPage = () => {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       }),
-    queryKey: ["work-hours-report", JSON.stringify(summaryParams)],
+    queryKey: ["work-hours-report", summaryParams],
   });
 
   const summaryTotal =
