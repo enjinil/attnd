@@ -4,10 +4,9 @@ import { Monthpicker } from "../../../components/ui/form/monthpicker";
 
 type Params = { month: string };
 
-type SummaryFilterFormProps = {
+export type SummaryFilterFormProps = {
   params: Params;
   onChange?: (changes: Params) => void;
-  customText?: (query: Params, defaultText: string) => string;
 };
 
 const SummaryFilterForm: React.FC<SummaryFilterFormProps> = ({
