@@ -83,6 +83,8 @@ const SessionsPage = () => {
             onChange={(changes) =>
               setSessionsParams({ ...sessionsParams, ...changes })
             }
+            total={sessionsData?.data.userTotalSessions.count}
+            page={sessionsParams.page}
             isLoading={isSessionsLoading}
           />
         </div>
