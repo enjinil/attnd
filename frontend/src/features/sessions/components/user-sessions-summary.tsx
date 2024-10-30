@@ -2,6 +2,7 @@ import { SummaryFilterForm, SummaryFilterFormProps } from "./summary-filter-form
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
 
 import clsx from "clsx";
+import { displayDecimal } from "../../../utils/number";
 
 interface UserSessionsSummaryProps extends SummaryFilterFormProps  {
   className?: string;
@@ -41,7 +42,7 @@ const UserSessionsSummary: React.FC<UserSessionsSummaryProps> = ({
               maxBarSize={20}
               dataKey="totalHours"
               fill="#14b8a6"
-              label={{ position: "top", fontSize: 10 }}
+              label={{ position: "top", fontSize: 10, formatter: displayDecimal }}
             />
             <XAxis
               tickFormatter={(x: string) => x.split("-")[2]}
