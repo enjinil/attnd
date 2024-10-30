@@ -295,7 +295,7 @@ export type AccountByIdQueryVariables = Exact<{
 }>;
 
 
-export type AccountByIdQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, name: string } };
+export type AccountByIdQuery = { __typename?: 'RootQueryType', account: { __typename?: 'Account', id: string, name: string, position: string } };
 
 export type SesssionsByUserIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -482,6 +482,7 @@ export const AccountByIdDocument = new TypedDocumentString(`
   account(id: $id) {
     id
     name
+    position
   }
 }
     `) as unknown as TypedDocumentString<AccountByIdQuery, AccountByIdQueryVariables>;

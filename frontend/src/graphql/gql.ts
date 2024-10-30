@@ -23,7 +23,7 @@ const documents = {
     "\n  mutation StartSession {\n    startUserSession {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n": types.StartSessionDocument,
     "\n  mutation EndSession($note: String!) {\n    endUserSession(note: $note) {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n  }\n": types.EndSessionDocument,
     "\n  subscription UpdatedSessionsSubscription ($token: String!) {\n    updatedSessions(token: $token) {\n      id\n      startTime\n      endTime\n      userId\n    }\n  }\n": types.UpdatedSessionsSubscriptionDocument,
-    "\n  query AccountById ($id: String!) {\n    account(id: $id) {\n      id\n      name\n    }\n  }\n": types.AccountByIdDocument,
+    "\n  query AccountById ($id: String!) {\n    account(id: $id) {\n      id\n      name\n      position\n    }\n  }\n": types.AccountByIdDocument,
     "\n  query SesssionsByUserId ($id: String!, $params: PaginatedSessionsParams!) {\n    sessionsByUserId(id: $id, params: $params) {\n      id\n      startTime\n      endTime\n      note\n      userId\n    }\n    totalSessionsByUserId(id: $id, params: $params) {\n      count\n    }\n  }\n": types.SesssionsByUserIdDocument,
     "\n  query WorkHoursReport($userId: String, $startDate: String!, $endDate: String!) {\n    workHoursReport(userId: $userId, startDate: $startDate, endDate: $endDate) {\n      userId\n      workDate\n      totalHours\n      sessionsPerDay\n    }\n  }\n": types.WorkHoursReportDocument,
     "\n  query Account($id: String!) {\n    account(id: $id) {\n      id\n      email\n      role\n      position\n      name\n      isActive\n    }\n  }  \n": types.AccountDocument,
@@ -72,7 +72,7 @@ export function gql(source: "\n  subscription UpdatedSessionsSubscription ($toke
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query AccountById ($id: String!) {\n    account(id: $id) {\n      id\n      name\n    }\n  }\n"): typeof import('./graphql').AccountByIdDocument;
+export function gql(source: "\n  query AccountById ($id: String!) {\n    account(id: $id) {\n      id\n      name\n      position\n    }\n  }\n"): typeof import('./graphql').AccountByIdDocument;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
