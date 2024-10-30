@@ -31,8 +31,8 @@ const ReadableDuration = ({ from, to }: ReadableDurationProps) => {
 
   return (
     <span>
-      {hours} hour{hours !== 1 ? "s" : ""} {minutes} minute
-      {minutes !== 1 ? "s" : ""}
+      {hours} hour{hours !== 1 ? "s" : ""}
+      {minutes > 0 && ` ${minutes} minute${minutes !== 1 ? "s" : ""}`}
     </span>
   );
 };

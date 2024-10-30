@@ -95,6 +95,7 @@ export const ACCOUNT_BY_ID = gql(`
     account(id: $id) {
       id
       name
+      position
     }
   }
 `);

@@ -27,8 +27,7 @@ const UserSessionsPage = () => {
   const urlParams = useParams();
 
   const { data: accountData } = useQuery({
-    queryFn: () =>
-      gqlRequest(ACCOUNT_BY_ID, { id: urlParams.id || "" }),
+    queryFn: () => gqlRequest(ACCOUNT_BY_ID, { id: urlParams.id || "" }),
     queryKey: ["adminAccountById", urlParams.id],
   });
 
@@ -63,7 +62,8 @@ const UserSessionsPage = () => {
       <div className="flex justify-between mb-4">
         <div className="flex">
           <h2 className="text-lg font-bold py-1 mr-6">
-            {accountData?.data.account?.name}
+            {accountData?.data.account?.name} (
+            {accountData?.data.account?.position})
           </h2>
         </div>
       </div>
