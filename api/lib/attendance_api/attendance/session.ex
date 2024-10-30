@@ -14,6 +14,12 @@ defmodule AttendanceApi.Attendance.Session do
     timestamps(type: :utc_datetime)
   end
 
+  def changeset(session, attrs) do
+    session
+    |> cast(attrs, [:user_id, :start_time, :end_time, :note])
+    |> validate_required([:start_time, :end_time, :user_id])
+  end
+
   def start_changeset(session, attrs) do
     session
     |> cast(attrs, [:user_id])
