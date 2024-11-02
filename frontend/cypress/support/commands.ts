@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -35,3 +36,54 @@
 //     }
 //   }
 // }
+
+import "@testing-library/cypress/add-commands";
+
+type Account = {
+  email: string;
+  password: string;
+  role: "admin" | "user";
+};
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      resetDatabase(): void;
+      createAccount(
+        account: Account
+      ): Cypress.Chainable<Cypress.Response<void>>;
+      loginAs(account: Account): void;
+    }
+  }
+}
+
+Cypress.Commands.add("resetDatabase", () => {
+  cy.request({
+    method: "DELETE",
+    url: "http://127.0.0.1:4000/test/reset-database",
+  });
+});
+
+Cypress.Commands.add("createAccount", (account) => {
+  cy.request("POST", "http://127.0.0.1:4000/test/create-account", account);
+});
+
+Cypress.Commands.add("loginAs", (account) => {
+  cy.createAccount(account).then(() => {
+    cy.request("POST", "http://127.0.0.1:4000/api/graphql", {
+      query:
+        "mutation Login($input: LoginInput!) { login(input: $input) { token email role position name }}",
+      variables: {
+        input: {
+          email: account.email,
+          password: account.password,
+        },
+      },
+    }).then((res) => {
+      window.localStorage.setItem(
+        "AUTH_TOKEN",
+        JSON.stringify(res.body.data.login.token)
+      );
+    });
+  });
+});
