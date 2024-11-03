@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/ui/button";
 import { CellButton } from "../../components/ui/cell-button";
 import DashboardLayout from "../../components/ui/dashboard-layout";
@@ -6,7 +6,6 @@ import { useTable } from "../../components/ui/table";
 import Table from "../../components/ui/table/table";
 import { gqlRequest } from "../../lib/graphql-client";
 import { useConfirm } from "../../hooks/useConfirm";
-import { queryClient } from "../../lib/react-query";
 import { useNotify } from "../../hooks/useNotify";
 import {
   UserSearchForm,
@@ -16,6 +15,7 @@ import { useState } from "react";
 import { DELETE_USER, USER_ACCOUNTS } from "../../features/users/user-gqls";
 
 const UsersPage = () => {
+  const queryClient = useQueryClient();
   const notify = useNotify();
   const searchForm = useSearchForm();
   const [confirm, ConfirmDialog] = useConfirm();
@@ -45,10 +45,12 @@ const UsersPage = () => {
       {
         field: "name",
         title: "Name",
+        className: "text-nowrap"
       },
       {
         field: "position",
         title: "Position",
+        className: "text-nowrap"
       },
       {
         field: "email",

@@ -9,7 +9,7 @@ const UsersNewPage = () => {
   const notify = useNotify();
 
   const handleCreateSuccess = () => {
-    notify(`User successfully created!`, "success");
+    notify(`User created successfully!`, "success");
     navigate("/users");
   };
 
