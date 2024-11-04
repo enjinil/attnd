@@ -1,7 +1,6 @@
 describe("Authentication", () => {
   beforeEach(() => {
     cy.resetDatabase();
-    cy.visit("/");
   });
 
   it("allows to login as admin", () => {
