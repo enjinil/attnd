@@ -3,13 +3,12 @@ import { Alert } from "../../../components/ui/alert";
 import { Field } from "../../../components/ui/form/field";
 import { Input } from "../../../components/ui/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { z } from "zod";
 import { Button } from "../../../components/ui/button";
 import { Radio, RadioOption } from "../../../components/ui/form/radio";
 import { Select } from "../../../components/ui/form/select";
 import { gqlRequest } from "../../../lib/graphql-client";
-import { queryClient } from "../../../lib/react-query";
 import { CREATE_ACCOUNT, UPDATE_ACCOUNT } from "../user-gqls";
 
 const userInputSchema = z.object({
@@ -65,6 +64,7 @@ const updateUser = (id: string, input: UserInput) => {
 };
 
 const UserForm = ({ onSuccess = () => null, data, id }: UserFormProps) => {
+  const queryClient = useQueryClient()
   const saveMutation = useMutation({
     mutationFn: (input: UserInput) =>
       id ? updateUser(id, input) : createUser(input),
@@ -91,7 +91,6 @@ const UserForm = ({ onSuccess = () => null, data, id }: UserFormProps) => {
           saveMutation.mutate(data);
         })}
       >
-        {JSON.stringify(form.formState.defaultValues)}
         <div className="space-y-4">
           <Field label="Name" error={errors["name"]}>
             <Input name="name" />

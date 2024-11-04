@@ -51,7 +51,10 @@ export const usePrompt = (): UsePromptReturn => {
     >
       <FormProvider {...form}>
         <form onSubmit={handleConfirm}>
-          <Input type="text" name="value" className="mt-2" />
+          <label>
+            <span className="hidden">Prompt</span>
+            <Input type="text" name="value" className="mt-2" />
+          </label>
         </form>
       </FormProvider>
     </Dialog>

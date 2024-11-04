@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { gqlRequest } from "./graphql-client";
-import { env } from "../config";
 import { LOGIN, LOGOUT } from "../features/auth/auth-gqls";
 
-const LOCAL_STORAGE_KEY = env.USER_AUTH_LOCAL_STORAGE_KEY || "USER_AUTH";
+const LOCAL_STORAGE_KEY = "AUTH_TOKEN";
 
 export type User = {
   email: string;

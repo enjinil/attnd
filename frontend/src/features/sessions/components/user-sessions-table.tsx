@@ -4,6 +4,7 @@ import { DurationTime } from "../../../components/ui/date/duration-time";
 import { displayDate } from "../../../utils/date";
 import { Pagination } from "../../../components/ui/pagination";
 import { PaginatedSessionsParams, Session } from "../../../graphql/graphql";
+import { useAlert } from "../../../hooks/useAlert";
 
 type UserSessionsTableProps = {
   data?: Session[] | null;
@@ -26,6 +27,7 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
   isLoading,
   onChange,
 }) => {
+  const [alert, AlertDialog] = useAlert()
   const sessionsTable = useTable({
     data: data || [],
     columns: [
@@ -59,7 +61,7 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
             <a
               className="text-blue-500"
               href="#"
-              onClick={() => alert(item.note)}
+              onClick={() => alert(item.note as string)}
             >
               Show note
             </a>
@@ -94,6 +96,7 @@ const UserSessionsTable: React.FC<UserSessionsTableProps> = ({
           perPage={perPage}
         />
       </div>
+      <AlertDialog />
     </div>
   );
 };

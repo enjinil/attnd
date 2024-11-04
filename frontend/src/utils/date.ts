@@ -66,6 +66,16 @@ export const displayMonth = (
   return `${year}/${month}`;
 };
 
+export const displayTime = (date: Date | string | null | undefined): string => {
+  if (!date) return "";
+
+  const d = new Date(date);
+  const HH = String(d.getHours()).padStart(2, "0");
+  const MM = String(d.getMinutes()).padStart(2, "0");
+
+  return `${HH}:${MM}`;
+};
+
 export const monthBoundaryDates = (monthStr: string | Date): [Date, Date] => {
   const date = new Date(monthStr);
   const startDate = new Date(date.getFullYear(), date.getMonth(), 1);

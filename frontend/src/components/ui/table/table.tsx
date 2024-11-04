@@ -61,6 +61,7 @@ export function Table<T extends { id: string | number }>({
                     column.className
                   )}
                   style={{ width: column.width }}
+                  data-testid={`column-${String(column.field)}`}
                 >
                   {column.renderContent
                     ? column.renderContent(item)
