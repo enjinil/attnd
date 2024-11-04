@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "generate": "graphql-codegen --config codegen.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
