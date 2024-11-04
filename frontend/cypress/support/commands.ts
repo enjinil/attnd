@@ -64,17 +64,17 @@ declare global {
 Cypress.Commands.add("resetDatabase", () => {
   cy.request({
     method: "DELETE",
-    url: "http://127.0.0.1:4000/test/reset-database",
+    url: Cypress.env("TEST_API_URL") + "/reset-database",
   });
 });
 
 Cypress.Commands.add("createAccount", (account) => {
-  cy.request("POST", "http://127.0.0.1:4000/test/create-account", account);
+  cy.request("POST", Cypress.env("TEST_API_URL") + "/create-account", account);
 });
 
 Cypress.Commands.add("loginAs", (account) => {
   cy.createAccount(account).then(() => {
-    cy.request("POST", "http://127.0.0.1:4000/api/graphql", {
+    cy.request("POST", Cypress.env("API_URL"), {
       query:
         "mutation Login($input: LoginInput!) { login(input: $input) { token email role position name }}",
       variables: {
@@ -96,7 +96,7 @@ Cypress.Commands.add("getAuthToken", ({ email, password }) => {
   return cy
     .request({
       method: "POST",
-      url: "http://127.0.0.1:4000/api/graphql",
+      url: Cypress.env("API_URL"),
       body: {
         query:
           "mutation Login($input: LoginInput!) { login(input: $input) { token email role position name }}",

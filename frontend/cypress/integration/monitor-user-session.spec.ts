@@ -1,4 +1,4 @@
-import { displayTime } from "../../src/utils/date";
+import { displayDate, displayTime } from "../../src/utils/date";
 
 describe("Monitor user session", () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe("Monitor user session", () => {
       // Start user session
       cy.request({
         method: "POST",
-        url: "http://127.0.0.1:4000/api/graphql",
+        url: Cypress.env("API_URL"),
         body: {
           query:
             "mutation StartSession { startUserSession { id startTime endTime note userId }}",
@@ -36,15 +36,17 @@ describe("Monitor user session", () => {
         },
       });
 
+      const startTime = new Date();
+
       cy.contains("Test Name (Test Position)").should("exist");
-      cy.findByTestId("column-startTime").contains(displayTime(new Date()));
+      cy.findByTestId("column-startTime").contains(displayTime(startTime));
 
       cy.wait(1000);
 
       // End user session
       cy.request({
         method: "POST",
-        url: "http://127.0.0.1:4000/api/graphql",
+        url: Cypress.env("API_URL"),
         body: {
           query:
             "mutation EndSession($note: String!) {  endUserSession(note: $note) {    id    startTime    endTime    note    userId  }}",
@@ -57,7 +59,23 @@ describe("Monitor user session", () => {
         },
       });
 
-      cy.findByTestId("column-endTime").contains(displayTime(new Date()));
+      const endTime = new Date();
+
+      cy.findByTestId("column-endTime").contains(displayTime(endTime));
+
+      // Check user sessions
+      cy.findByRole("link", { name: /users/i }).click();
+
+      cy.contains(userAccount.email)
+        .parent("tr")
+        .findByRole("link", { name: /sessions/i })
+        .click();
+
+      cy.contains("Test Name (Test Position)").should("exist");
+      cy.findByTestId("column-date").contains(displayDate(startTime));
+      cy.findByTestId("column-startTime").contains(displayTime(startTime));
+      cy.findByTestId("column-endTime").contains(displayTime(endTime));
+
       cy.findByRole("link", { name: /show note/i }).click();
       cy.contains("Completed test monitor session.").should("exist");
     });
