@@ -52,8 +52,8 @@ defmodule AttendanceApiWeb.TestsController do
       email: email,
       password: password,
       role: role,
-      position: "Test",
-      name: "Test",
+      position: "Test Position",
+      name: "Test Name",
       is_active: true
     }
 
