@@ -46,7 +46,7 @@ const SessionsPage = () => {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       }),
-    queryKey: ["work-hours-report", summaryParams],
+    queryKey: ["workHoursReport", summaryParams],
   });
 
   return (

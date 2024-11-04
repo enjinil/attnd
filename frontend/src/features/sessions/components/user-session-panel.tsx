@@ -13,8 +13,10 @@ import {
   START_SESSION,
 } from "../sessions-gqls";
 import { usePrompt } from "../../../hooks/usePrompt";
+import { useNotify } from "../../../hooks/useNotify";
 
 const UserSessionPanel = () => {
+  const notify = useNotify();
   const [prompt, PromptDialog] = usePrompt();
   const user = useUser();
   const { data, isSuccess } = useQuery({
@@ -34,6 +36,8 @@ const UserSessionPanel = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["userTodaySessions"]);
       queryClient.invalidateQueries(["userSessions"]);
+      queryClient.invalidateQueries(["workHoursReport"]);
+      notify("Session ended!", "success");
     },
   });
 
