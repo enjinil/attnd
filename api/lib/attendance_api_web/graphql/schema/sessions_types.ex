@@ -117,12 +117,11 @@ defmodule AttendanceApiWeb.GraphQl.Schema.SessionsTypes do
         end
       end
 
-      trigger [:start_session, :end_session], topic: fn _ ->
+      trigger [:start_user_session, :end_user_session], topic: fn _ ->
         ["*"]
       end
 
       resolve fn root, _, _ ->
-        IO.inspect(root)
         {:ok, root}
       end
     end
