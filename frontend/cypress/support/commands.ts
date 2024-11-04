@@ -53,6 +53,10 @@ declare global {
         account: Account
       ): Cypress.Chainable<Cypress.Response<void>>;
       loginAs(account: Account): void;
+      getAuthToken(credentials: {
+        email: string;
+        password: string;
+      }): Chainable<string>;
     }
   }
 }
@@ -86,4 +90,26 @@ Cypress.Commands.add("loginAs", (account) => {
       );
     });
   });
+});
+
+Cypress.Commands.add("getAuthToken", ({ email, password }) => {
+  return cy
+    .request({
+      method: "POST",
+      url: "http://127.0.0.1:4000/api/graphql",
+      body: {
+        query:
+          "mutation Login($input: LoginInput!) { login(input: $input) { token email role position name }}",
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
+      },
+      failOnStatusCode: false,
+    })
+    .then((response) => {
+      return response.body.data.login.token;
+    });
 });
