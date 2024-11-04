@@ -73,10 +73,12 @@ class AuthAPI {
   }
 
   async logout() {
-    await gqlRequest(LOGOUT);
-
-    window.localStorage.removeItem(LOCAL_STORAGE_KEY);
-    this.notifyLogoutObservers();
+    await gqlRequest(LOGOUT)
+      .catch(console.error)
+      .finally(() => {
+        window.localStorage.removeItem(LOCAL_STORAGE_KEY);
+        this.notifyLogoutObservers();
+      });
   }
 }
 
