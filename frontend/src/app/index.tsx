@@ -17,6 +17,7 @@ import UsersEditPage from "./routes/users-edit";
 import useBootstrapUser from "../features/auth/hooks/useBootstrapUser";
 import SessionsPage from "./routes/sessions";
 import UserSessionsPage from "./routes/user-sessions";
+import LoadingDots from "../components/ui/loading-dots";
 
 const AdminRoute = () => {
   const user = useUser();
@@ -65,10 +66,16 @@ const router = createBrowserRouter(
   ])
 );
 
+const PageLoading = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-gradient-to-b from-slate-200 to-teal-50 px-3 sm:px-0">
+    <LoadingDots />
+  </div>
+);
+
 const App = () => {
   const { isLoading } = useBootstrapUser();
 
-  return isLoading ? "Loading user.." : <RouterProvider router={router} />;
+  return isLoading ? <PageLoading /> : <RouterProvider router={router} />;
 };
 
 export default App;

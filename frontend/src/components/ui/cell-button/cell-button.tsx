@@ -50,7 +50,7 @@ export const CellButton = React.forwardRef<
         ref={ref as React.Ref<HTMLAnchorElement>}
         {...(commonProps as AnchorProps)}
       >
-        {isLoading ? "Loading.." : children}
+        {children}
       </Link>
     );
   }
