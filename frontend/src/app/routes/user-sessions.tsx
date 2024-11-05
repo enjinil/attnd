@@ -1,4 +1,4 @@
-import DashboardLayout from "../../components/ui/dashboard-layout";
+import DashboardLayout from "../../components/layouts/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { useState } from "react";
 import {

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
-import DashboardLayout from "../../components/ui/dashboard-layout";
+import DashboardLayout from "../../components/layouts/dashboard-layout";
 import UserForm from "../../features/users/components/user-form";
 import { useNotify } from "../../hooks/useNotify";
 

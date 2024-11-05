@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/ui/button";
 import { CellButton } from "../../components/ui/cell-button";
-import DashboardLayout from "../../components/ui/dashboard-layout";
+import DashboardLayout from "../../components/layouts/dashboard-layout";
 import { useTable } from "../../components/ui/table";
 import Table from "../../components/ui/table/table";
 import { gqlRequest } from "../../lib/graphql-client";

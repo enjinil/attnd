@@ -1,4 +1,4 @@
-import DashboardLayout from "../../components/ui/dashboard-layout";
+import DashboardLayout from "../../components/layouts/dashboard-layout";
 import LoginButton from "../../features/auth/components/login-button";
 import { useUser } from "../../hooks/store";
 import WelcomeMessage from "../../welcome-message";

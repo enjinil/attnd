@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DashboardLayout from "../../components/ui/dashboard-layout";
+import DashboardLayout from "../../components/layouts/dashboard-layout";
 import { UserSessionPanel } from "../../features/sessions/components/user-session-panel";
 import { UserSessionsTable } from "../../features/sessions/components/user-sessions-table";
 import { PaginatedSessionsParams } from "../../graphql/graphql";
