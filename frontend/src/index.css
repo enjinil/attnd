@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Loading Animation */
+.loading-dots {
+  margin: 0 24px;
+  width: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: dots 800ms infinite linear alternate;
+}
+@keyframes dots {
+    0%  {box-shadow: 16px 0 #000, -16px 0 #0002;background: #000 }
+    33% {box-shadow: 16px 0 #000, -16px 0 #0002;background: #0002}
+    66% {box-shadow: 16px 0 #0002,-16px 0 #000; background: #0002}
+    100%{box-shadow: 16px 0 #0002,-16px 0 #000; background: #000 }
+}
