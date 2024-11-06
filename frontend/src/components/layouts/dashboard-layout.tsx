@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Header from "./header/header";
+import Header from "../ui/header/header";
 
 const DashboardLayout = ({ children }: { children?: ReactNode }) => {
   return (

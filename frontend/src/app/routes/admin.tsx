@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DashboardLayout from "../../components/ui/dashboard-layout";
+import DashboardLayout from "../../components/layouts/dashboard-layout";
 import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
 import { displayDate } from "../../utils/date";
 import { AdminDashboardSessionsTable } from "../../features/sessions/components/admin-dashboard-sessions-table";
