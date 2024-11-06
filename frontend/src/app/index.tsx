@@ -8,15 +8,15 @@ import {
 } from "react-router-dom";
 import HomePage from "./routes/home";
 import LoginPage from "./routes/login";
-import UsersPage from "./routes/users";
+import UsersPage from "./routes/admin/users";
 import { useUser } from "../hooks/store";
-import UsersNewPage from "./routes/users-new";
+import UsersNewPage from "./routes/admin/users-new";
 import AdminPage from "./routes/admin";
 import { isAdminUser } from "../utils/user";
-import UsersEditPage from "./routes/users-edit";
+import UsersEditPage from "./routes/admin/users-edit";
 import useBootstrapUser from "../features/auth/hooks/useBootstrapUser";
 import SessionsPage from "./routes/sessions";
-import UserSessionsPage from "./routes/user-sessions";
+import UserSessionsPage from "./routes/admin/user-sessions";
 import LoadingDots from "../components/ui/loading-dots";
 
 const AdminRoute = () => {
@@ -54,10 +54,10 @@ const router = createBrowserRouter(
     </Route>,
     <Route element={<AdminRoute />}>
       <Route path="/admin" element={<AdminPage />} />
-      <Route path="/users" element={<UsersPage />} />
-      <Route path="/users/new" element={<UsersNewPage />} />
-      <Route path="/users/:id" element={<UsersEditPage />} />
-      <Route path="/user-sessions/:id" element={<UserSessionsPage />} />
+      <Route path="/admin/users" element={<UsersPage />} />
+      <Route path="/admin/users/new" element={<UsersNewPage />} />
+      <Route path="/admin/users/:id" element={<UsersEditPage />} />
+      <Route path="/admin/user-sessions/:id" element={<UserSessionsPage />} />
     </Route>,
     <Route element={<NotAuthenticationRoute />}>
       <Route path="/login" element={<LoginPage />} />

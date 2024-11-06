@@ -28,7 +28,7 @@ const AdminDashboardSessionsTable: React.FC<AdminUserSessionsTableProps> = ({
         className: "whitespace-nowrap",
         renderContent: (item) => (
           <>
-            <Link className="hover:text-blue-600" to={`/user-sessions/${item.userId}`}>
+            <Link className="hover:text-blue-600" to={`/admin/user-sessions/${item.userId}`}>
               {getField(item, "user.name")}
             </Link>
             <span> ({getField(item, "user.position") || "-"})</span>

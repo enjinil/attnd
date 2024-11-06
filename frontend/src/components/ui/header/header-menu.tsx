@@ -18,7 +18,7 @@ const HeaderMenu = () => {
             </Link>
             <Link
               className="font-semibold px-2 py-2 rounded hover:bg-slate-100"
-              to="/users"
+              to="/admin/users"
             >
               Users
             </Link>

@@ -28,7 +28,7 @@ describe("Manage user", () => {
     cy.contains("User created successfully!").should("exist");
 
     cy.location().should(({ pathname }) => {
-      expect(pathname).to.equal("/users");
+      expect(pathname).to.equal("/admin/users");
     });
 
     // Update user
@@ -50,7 +50,7 @@ describe("Manage user", () => {
     cy.findByRole("button", { name: /back/i }).click();
 
     cy.location().should(({ pathname }) => {
-      expect(pathname).to.equal("/users");
+      expect(pathname).to.equal("/admin/users");
     });
 
     // Delete user
