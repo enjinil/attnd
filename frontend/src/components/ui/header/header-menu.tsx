@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useUser } from "../../../hooks/store";
-import { isAdminUser } from "../../../utils/user";
+import { useUser } from "@/hooks/store";
+import { isAdminUser } from "@/utils/user";
 
 const HeaderMenu = () => {
   const user = useUser();

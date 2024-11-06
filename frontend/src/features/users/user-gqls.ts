@@ -1,4 +1,4 @@
-import { gql } from "../../graphql";
+import { gql } from "@/graphql";
 
 export const ACCOUNT = gql(`
   query Account($id: String!) {

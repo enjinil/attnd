@@ -1,14 +1,14 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { Alert } from "../../../components/ui/alert";
-import { Button } from "../../../components/ui/button";
-import { Field } from "../../../components/ui/form/field";
-import { Input } from "../../../components/ui/form/input";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/form/field";
+import { Input } from "@/components/ui/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   login,
   LoginInput,
   loginInputSchema,
-} from "../../../lib/auth-provider";
+} from "@/lib/auth-provider";
 import { useMutation } from "react-query";
 
 interface LoginFormProps {

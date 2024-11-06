@@ -2,7 +2,7 @@ import { forwardRef, ReactElement } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useController, useFormContext } from "react-hook-form";
-import { displayDate } from "../../../utils/date";
+import { displayDate } from "@/utils/date";
 
 type DatepickerProps = {
   children?: ReactElement;

@@ -1,22 +1,22 @@
 import { useState } from "react";
-import DashboardLayout from "../../components/layouts/dashboard-layout";
-import { UserSessionPanel } from "../../features/sessions/components/user-session-panel";
-import { UserSessionsTable } from "../../features/sessions/components/user-sessions-table";
-import { PaginatedSessionsParams } from "../../graphql/graphql";
-import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
-import { gqlRequest } from "../../lib/graphql-client";
+import DashboardLayout from "@/components/layouts/dashboard-layout";
+import { UserSessionPanel } from "@/features/sessions/components/user-session-panel";
+import { UserSessionsTable } from "@/features/sessions/components/user-sessions-table";
+import { PaginatedSessionsParams } from "@/graphql/graphql";
+import { SessionsFilterForm } from "@/features/sessions/components/sessions-filter-form";
+import { gqlRequest } from "@/lib/graphql-client";
 import {
   USER_SESSIONS,
   WORK_HOURS_REPORT,
-} from "../../features/sessions/sessions-gqls";
+} from "@/features/sessions/sessions-gqls";
 import { useQuery } from "react-query";
-import { UserSessionsSummary } from "../../features/sessions/components/user-sessions-summary";
+import { UserSessionsSummary } from "@/features/sessions/components/user-sessions-summary";
 import {
   displayMonth,
   formatDate,
   monthBoundaryDates,
   parseMonth,
-} from "../../utils/date";
+} from "@/utils/date";
 
 const SessionsPage = () => {
   const [sessionsParams, setSessionsParams] = useState<PaginatedSessionsParams>(

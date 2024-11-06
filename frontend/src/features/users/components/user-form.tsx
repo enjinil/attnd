@@ -1,14 +1,14 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { Alert } from "../../../components/ui/alert";
-import { Field } from "../../../components/ui/form/field";
-import { Input } from "../../../components/ui/form/input";
+import { Alert } from "@/components/ui/alert";
+import { Field } from "@/components/ui/form/field";
+import { Input } from "@/components/ui/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "react-query";
 import { z } from "zod";
-import { Button } from "../../../components/ui/button";
-import { Radio, RadioOption } from "../../../components/ui/form/radio";
-import { Select } from "../../../components/ui/form/select";
-import { gqlRequest } from "../../../lib/graphql-client";
+import { Button } from "@/components/ui/button";
+import { Radio, RadioOption } from "@/components/ui/form/radio";
+import { Select } from "@/components/ui/form/select";
+import { gqlRequest } from "@/lib/graphql-client";
 import { CREATE_ACCOUNT, UPDATE_ACCOUNT } from "../user-gqls";
 
 const userInputSchema = z.object({

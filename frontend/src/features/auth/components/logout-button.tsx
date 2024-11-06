@@ -1,5 +1,5 @@
-import { Button } from "../../../components/ui/button";
-import { logout } from "../../../lib/auth-provider";
+import { Button } from "@/components/ui/button";
+import { logout } from "@/lib/auth-provider";
 
 const LogoutButton = ({ className }: { className?: string }) => {
   return (

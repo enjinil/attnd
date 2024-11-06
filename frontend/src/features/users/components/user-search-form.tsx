@@ -1,5 +1,5 @@
 import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
-import { Input } from "../../../components/ui/form/input";
+import { Input } from "@/components/ui/form/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 

@@ -1,14 +1,14 @@
 import { useState } from "react";
-import DashboardLayout from "../../components/layouts/dashboard-layout";
-import { SessionsFilterForm } from "../../features/sessions/components/sessions-filter-form";
-import { displayDate } from "../../utils/date";
-import { AdminDashboardSessionsTable } from "../../features/sessions/components/admin-dashboard-sessions-table";
+import DashboardLayout from "@/components/layouts/dashboard-layout";
+import { SessionsFilterForm } from "@/features/sessions/components/sessions-filter-form";
+import { displayDate } from "@/utils/date";
+import { AdminDashboardSessionsTable } from "@/features/sessions/components/admin-dashboard-sessions-table";
 import { useQuery } from "react-query";
-import { gqlRequest } from "../../lib/graphql-client";
-import { ADMIN_USER_SESSIONS, UPDATED_SESSIONS_SUBS } from "../../features/sessions/sessions-gqls";
-import { useSubscription } from "../../hooks/useSubscription";
-import { getToken } from "../../lib/auth-provider";
-import { queryClient } from "../../lib/react-query";
+import { gqlRequest } from "@/lib/graphql-client";
+import { ADMIN_USER_SESSIONS, UPDATED_SESSIONS_SUBS } from "@/features/sessions/sessions-gqls";
+import { useSubscription } from "@/hooks/useSubscription";
+import { getToken } from "@/lib/auth-provider";
+import { queryClient } from "@/lib/react-query";
 
 const todayDate = displayDate(new Date());
 

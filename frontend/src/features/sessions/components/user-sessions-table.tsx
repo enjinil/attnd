@@ -1,10 +1,10 @@
-import { Table, useTable } from "../../../components/ui/table";
-import { FormattedTime } from "../../../components/ui/date";
-import { DurationTime } from "../../../components/ui/date/duration-time";
-import { displayDate } from "../../../utils/date";
-import { Pagination } from "../../../components/ui/pagination";
-import { PaginatedSessionsParams, Session } from "../../../graphql/graphql";
-import { useAlert } from "../../../hooks/useAlert";
+import { Table, useTable } from "@/components/ui/table";
+import { FormattedTime } from "@/components/ui/date";
+import { DurationTime } from "@/components/ui/date/duration-time";
+import { displayDate } from "@/utils/date";
+import { Pagination } from "@/components/ui/pagination";
+import { PaginatedSessionsParams, Session } from "@/graphql/graphql";
+import { useAlert } from "@/hooks/useAlert";
 
 type UserSessionsTableProps = {
   data?: Session[] | null;

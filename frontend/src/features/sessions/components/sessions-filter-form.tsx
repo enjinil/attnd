@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { Datepicker } from "../../../components/ui/form/datepicker";
+import { Datepicker } from "@/components/ui/form/datepicker";
 import { forwardRef, memo, useEffect } from "react";
 
 type Params = { startDate: string }

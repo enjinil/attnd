@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getToken, logout } from "../../../lib/auth-provider";
-import { gqlRequest } from "../../../lib/graphql-client";
-import { useAppDispatch } from "../../../hooks/store";
+import { getToken, logout } from "@/lib/auth-provider";
+import { gqlRequest } from "@/lib/graphql-client";
+import { useAppDispatch } from "@/hooks/store";
 import { userLoggedIn } from "../store/auth-slice";
 import { ME } from "../auth-gqls";
 

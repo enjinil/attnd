@@ -1,9 +1,9 @@
-import { Table, useTable } from "../../../components/ui/table";
-import { FormattedTime } from "../../../components/ui/date";
-import { DurationTime } from "../../../components/ui/date/duration-time";
-import { SessionWithUser } from "../../../graphql/graphql";
-import { getField } from "../../../utils/object";
-import { useAlert } from "../../../hooks/useAlert";
+import { Table, useTable } from "@/components/ui/table";
+import { FormattedTime } from "@/components/ui/date";
+import { DurationTime } from "@/components/ui/date/duration-time";
+import { SessionWithUser } from "@/graphql/graphql";
+import { getField } from "@/utils/object";
+import { useAlert } from "@/hooks/useAlert";
 import { Link } from "react-router-dom";
 
 type AdminUserSessionsTableProps = {
