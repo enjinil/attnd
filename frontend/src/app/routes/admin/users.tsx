@@ -1,18 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Button } from "../../components/ui/button";
-import { CellButton } from "../../components/ui/cell-button";
-import DashboardLayout from "../../components/layouts/dashboard-layout";
-import { useTable } from "../../components/ui/table";
-import Table from "../../components/ui/table/table";
-import { gqlRequest } from "../../lib/graphql-client";
-import { useConfirm } from "../../hooks/useConfirm";
-import { useNotify } from "../../hooks/useNotify";
+import { Button } from "../../../components/ui/button";
+import { CellButton } from "../../../components/ui/cell-button";
+import DashboardLayout from "../../../components/layouts/dashboard-layout";
+import { useTable } from "../../../components/ui/table";
+import Table from "../../../components/ui/table/table";
+import { gqlRequest } from "../../../lib/graphql-client";
+import { useConfirm } from "../../../hooks/useConfirm";
+import { useNotify } from "../../../hooks/useNotify";
 import {
   UserSearchForm,
   useSearchForm,
-} from "../../features/users/components/user-search-form";
+} from "../../../features/users/components/user-search-form";
 import { useState } from "react";
-import { DELETE_USER, USER_ACCOUNTS } from "../../features/users/user-gqls";
+import { DELETE_USER, USER_ACCOUNTS } from "../../../features/users/user-gqls";
 
 const UsersPage = () => {
   const queryClient = useQueryClient();
@@ -75,7 +75,7 @@ const UsersPage = () => {
         width: "80px",
         renderContent(item) {
           return (
-            <CellButton to={`/user-sessions/${item.id}`}>sessions</CellButton>
+            <CellButton to={`/admin/user-sessions/${item.id}`}>sessions</CellButton>
           );
         },
       },
@@ -98,7 +98,7 @@ const UsersPage = () => {
               >
                 delete
               </CellButton>
-              <CellButton to={`/users/${item.id}`}>edit</CellButton>
+              <CellButton to={`/admin/users/${item.id}`}>edit</CellButton>
             </div>
           );
         },
@@ -115,7 +115,7 @@ const UsersPage = () => {
             form={searchForm}
             onSubmit={() => setQueryTimestamp(new Date().getTime().toString())}
           />
-          <Button to="/users/new">New User</Button>
+          <Button to="/admin/users/new">New User</Button>
         </div>
       </div>
       <Table className="mb-2" {...usersTable.props} />
