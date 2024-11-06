@@ -1,7 +1,7 @@
 import { forwardRef, ReactElement } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useController, useFormContext } from "react-hook-form";
-import { displayMonth } from "../../../utils/date";
+import { displayMonth } from "@/utils/date";
 import DatePicker from "react-datepicker";
 
 type MonthpickerProps = {

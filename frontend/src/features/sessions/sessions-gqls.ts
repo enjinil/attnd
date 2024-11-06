@@ -1,4 +1,4 @@
-import { gql } from "../../graphql";
+import { gql } from "@/graphql";
 
 export const USER_SESSIONS = gql(`
   query UserSessions ($params: PaginatedSessionsParams) {

@@ -1,6 +1,6 @@
-import LogoutButton from "../../../features/auth/components/logout-button";
-import { useUser } from "../../../hooks/store";
-import { isAdminUser } from "../../../utils/user";
+import LogoutButton from "@/features/auth/components/logout-button";
+import { useUser } from "@/hooks/store";
+import { isAdminUser } from "@/utils/user";
 import CurrentTime from "../current-time";
 import Logo from "../logo";
 import HeaderMenu from "./header-menu";

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useUser } from "../../hooks/store";
+import { useUser } from "@/hooks/store";
 
 const Logo = ({ className }: { className?: string }) => {
   const user = useUser();

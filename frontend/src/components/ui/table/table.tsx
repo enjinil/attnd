@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import { getField } from "../../../utils/object";
+import { getField } from "@/utils/object";
 
 type Alignment = "left" | "right" | "center";
 

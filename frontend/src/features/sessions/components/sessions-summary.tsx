@@ -1,6 +1,6 @@
-import { FormattedTime } from "../../../components/ui/date";
-import { ReadableDuration } from "../../../components/ui/date/readable-duration";
-import { Session } from "../../../graphql/graphql";
+import { FormattedTime } from "@/components/ui/date";
+import { ReadableDuration } from "@/components/ui/date/readable-duration";
+import { Session } from "@/graphql/graphql";
 import { SessionsTotalDuration } from "./sessions-total-duration";
 
 type SessionsSummaryProps = {

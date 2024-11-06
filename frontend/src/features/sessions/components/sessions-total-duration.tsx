@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ReadableDuration } from "../../../components/ui/date/readable-duration";
-import { Session } from "../../../graphql/graphql";
+import { ReadableDuration } from "@/components/ui/date/readable-duration";
+import { Session } from "@/graphql/graphql";
 
 type SessionsTotalDurationProps = {
   sessions: Session[];

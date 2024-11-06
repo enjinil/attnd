@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getToken } from "../../../lib/auth-provider";
+import { getToken } from "@/lib/auth-provider";
 
 interface AuthState {
   user: null | { email: string; role: string; position: string; name: string };

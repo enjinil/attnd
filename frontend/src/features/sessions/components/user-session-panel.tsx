@@ -1,19 +1,19 @@
 import { useMutation, useQuery } from "react-query";
-import { Button } from "../../../components/ui/button";
-import { useUser } from "../../../hooks/store";
-import { gqlRequest } from "../../../lib/graphql-client";
-import { FormattedTime } from "../../../components/ui/date";
-import { ElapsedTime } from "../../../components/ui/date/elapsed-time";
-import { queryClient } from "../../../lib/react-query";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/store";
+import { gqlRequest } from "@/lib/graphql-client";
+import { FormattedTime } from "@/components/ui/date";
+import { ElapsedTime } from "@/components/ui/date/elapsed-time";
+import { queryClient } from "@/lib/react-query";
 import { SessionsSummary } from "./sessions-summary";
-import { Session } from "../../../graphql/graphql";
+import { Session } from "@/graphql/graphql";
 import {
   END_SESSION,
   PANEL_USER_SESSIONS,
   START_SESSION,
 } from "../sessions-gqls";
-import { usePrompt } from "../../../hooks/usePrompt";
-import { useNotify } from "../../../hooks/useNotify";
+import { usePrompt } from "@/hooks/usePrompt";
+import { useNotify } from "@/hooks/useNotify";
 
 const UserSessionPanel = () => {
   const notify = useNotify();

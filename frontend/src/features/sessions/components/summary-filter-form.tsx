@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { forwardRef, memo, useEffect } from "react";
-import { Monthpicker } from "../../../components/ui/form/monthpicker";
+import { Monthpicker } from "@/components/ui/form/monthpicker";
 
 type Params = { month: string };
 

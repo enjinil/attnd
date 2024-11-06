@@ -5,7 +5,7 @@ import {
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
 
 import clsx from "clsx";
-import { displayDecimal } from "../../../utils/number";
+import { displayDecimal } from "@/utils/number";
 
 interface UserSessionsSummaryProps extends SummaryFilterFormProps {
   className?: string;
